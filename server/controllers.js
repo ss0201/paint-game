@@ -19,19 +19,19 @@ Meteor.startup(function () {
   Subjects.remove({});
   Answers.remove({});
   Games.insert(new Game(TIME_LIMIT));
-  Meteor.publish("games"), function () {
+  Meteor.publish("games", function () {
     return Games.find({});
-  }
-  Meteor.publish("subjects"), function (playerId) {
+  });
+  Meteor.publish("subjects", function (playerId) {
     return Subjects.find({$or: [
       {drawerId: playerId},
       {answered: true}
     ]});
-  }
-  Meteor.publish("players"), function () {
+  });
+  Meteor.publish("players", function () {
     return Players.find({});
-  }
-  Meteor.publish("answers"), function () {
+  });
+  Meteor.publish("answers", function () {
     return Answers.find({});
-  }
+  });
 });
