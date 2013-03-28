@@ -1,6 +1,16 @@
-function Game (clock) {
+function Phase (name, duration) {
   var self = this;
-  self.clock = clock;
+  self.name = name;
+  self.duration = duration;
+}
+
+var DRAWING_PHASE = new Phase("Drawing", 10);
+var GUESSING_PHASE = new Phase("Guessing", 5);
+
+function Game (phase) {
+  var self = this;
+  self.phase = phase;
+  self.clock = phase.duration;
 }
 
 function Player () {
@@ -37,15 +47,30 @@ if (Meteor.isServer) {
   
   function isTimeOver (game) {
     return (game.clock == 0);
-  };
+  }
+  
+  function changePhase (game) {
+    var nextPhase = null;
+    switch (game.phase.name) {
+      case DRAWING_PHASE.name:
+        nextPhase = GUESSING_PHASE;
+        break;
+      case GUESSING_PHASE.name:
+        nextPhase = DRAWING_PHASE;
+        break;
+      default:
+        break;
+    }
+    Games.update(game._id, {$set: {phase: nextPhase, clock: nextPhase.duration}});
+  }
 }
 
-Games = new Meteor.Collection("games");
-Players = new Meteor.Collection("players");
-Subjects = new Meteor.Collection("subjects");
-Answers = new Meteor.Collection("answers");
+var Games = new Meteor.Collection("games");
+var Players = new Meteor.Collection("players");
+var Subjects = new Meteor.Collection("subjects");
+var Answers = new Meteor.Collection("answers");
 if (Meteor.isServer) {
-  Problems = new Meteor.Collection(null);
+  var Problems = new Meteor.Collection(null);
 }
 
 Meteor.methods({

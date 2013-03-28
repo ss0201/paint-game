@@ -1,15 +1,15 @@
-var TIME_LIMIT = 60;
-
 function progress () {
   var game = Games.findOne({});
   tickClock(game);
   if (isTimeOver(game)) {
     var players = Players.find({});
+    var ids = new Array();
     players.forEach(function (player) {
-      Subjects.remove({});
       Meteor.call("requireSubject", player._id);
+      ids.push(player._id);
     });
-    Games.update(game._id, {$set: {clock: TIME_LIMIT}});
+    Subjects.remove({drawerId: {$not: {$in: ids}}});
+    changePhase(game);
   }
 }
 
@@ -20,7 +20,7 @@ Meteor.startup(function () {
   Answers.remove({});
   Problems.remove({});
   
-  Games.insert(new Game(TIME_LIMIT));
+  Games.insert(new Game(DRAWING_PHASE));
   Problems.insert(new Problem("a"));
   Problems.insert(new Problem("b"));
   Problems.insert(new Problem("c"));
