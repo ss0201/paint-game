@@ -6,6 +6,7 @@
   <h1>Paint Game!</h1>
   {{> game }}
   {{> subject }}
+  {{> paint }}
 </body>
 
 <template name="game">
@@ -14,4 +15,8 @@
 
 <template name="subject">
   {{ text }}
+</template>
+
+<template name="paint">
+  <div id="paint" style="width:800px; height:600px; background:#FFFFFF; border:solid black 1px;" />
 </template>

@@ -7,7 +7,7 @@ Template.game.clock = function () {
   var min = Math.floor(clock / 60);
   var sec = clock % 60;
   return min + ':' + (sec < 10 ? '0' : '') + sec;
-}
+};
 
 Template.subject.text = function () {
   var subject = Subjects.findOne({drawerId: Session.get("playerId")});
@@ -16,4 +16,11 @@ Template.subject.text = function () {
     return;
   }
   return text;
-}
+};
+
+Meteor.startup(function () {
+	$("#paint").wPaint({
+    strokeStyle: "#000000",
+    menu: ["fillColor", "lineWidth", "eraser", "undo", "clear"]
+  });
+});

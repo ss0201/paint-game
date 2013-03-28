@@ -18,7 +18,15 @@ Meteor.startup(function () {
   Players.remove({});
   Subjects.remove({});
   Answers.remove({});
+  Problems.remove({});
+  
   Games.insert(new Game(TIME_LIMIT));
+  Problems.insert(new Problem("a"));
+  Problems.insert(new Problem("b"));
+  Problems.insert(new Problem("c"));
+  Problems.insert(new Problem("d"));
+  Problems.insert(new Problem("e"));
+  
   Meteor.publish("games", function () {
     return Games.find({});
   });
@@ -35,3 +43,13 @@ Meteor.startup(function () {
     return Answers.find({});
   });
 });
+
+function getRandomProblem () {
+  var problems = Problems.find({});
+  var random = getRandomValue(0, problems.count() - 1);
+  return problems.fetch()[random];
+}
+
+function getRandomValue (min, max) {
+  return Math.floor((Math.random() * max) + min);
+}
