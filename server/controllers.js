@@ -1,6 +1,6 @@
 var TIME_LIMIT = 60;
 
-Meteor.setInterval(function () {
+function progress () {
   var game = Games.findOne({});
   tickClock(game);
   if (isTimeOver(game)) {
@@ -11,7 +11,7 @@ Meteor.setInterval(function () {
     });
     Games.update(game._id, {$set: {clock: TIME_LIMIT}});
   }
-}, 1*1000);
+}
 
 Meteor.startup(function () {
   Games.remove({});
@@ -42,6 +42,8 @@ Meteor.startup(function () {
   Meteor.publish("answers", function () {
     return Answers.find({});
   });
+
+  Meteor.setInterval(progress, 1*1000);
 });
 
 function getRandomProblem () {
