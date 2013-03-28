@@ -21,6 +21,6 @@ Template.subject.text = function () {
 Meteor.startup(function () {
 	$("#paint").wPaint({
     strokeStyle: "#000000",
-    menu: ["fillColor", "lineWidth", "eraser", "undo", "clear"]
+    menu: ["pencil", "eraser", "strokeColor", "lineWidth", "undo", "redo", "clear"]
   });
 });
