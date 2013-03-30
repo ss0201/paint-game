@@ -92,8 +92,21 @@ Meteor.methods({
   }
 });
 
-if (Meteor.isClient) {
-  function sendPicture (drawerId, image) {
-    Pictures.insert(new Picture(drawerId, image));
+Meteor.methods({
+  requireSubject: function (drawerId) {
+    if (Meteor.isServer) {
+      var problem = getRandomProblem();
+      if (Subjects.find({drawerId: drawerId}).count() == 0) {
+        Subjects.insert(new Subject(problem.text, drawerId));
+      } else {
+        Subjects.update({drawerId: drawerId}, {$set: {text: problem.text}});
+      }
+    }
+  },
+  
+  sendPicture: function (drawerId, image) {
+    if (Meteor.isServer) {
+      Pictures.insert(new Picture(drawerId, image));
+    }
   }
-}
+});

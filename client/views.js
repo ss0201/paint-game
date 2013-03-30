@@ -71,12 +71,20 @@ Template.picture.drawer = function () {
 
 Template.picture.image = function () {
   var picture = Pictures.findOne({drawerId: this._id});
-  return picture.image;
+  var image = picture && picture.image;
+  if (!image) {
+    return;
+  }
+  return image;
 };
 
 Template.picture.subject = function () {
   var subject = Subjects.findOne({drawerId: this._id});
-  return subject.text;
+  var text = subject && subject.text;
+  if (!text) {
+    return "Invalid Subject";
+  }
+  return text;
 };
 
 function clearPaintArea () {

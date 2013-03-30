@@ -15,8 +15,8 @@ Meteor.startup(function () {
     changed: function (id, fields) {
       if (fields.hasOwnProperty("phase")) {
         if (phaseEquals(fields.phase, GUESSING_PHASE)) {
-          var picture = $("#paint").wPaint("image");
-          sendPicture(playerId, picture);
+          var image = $("#paint").wPaint("image");
+          Meteor.call("sendPicture", playerId, image);
           clearPaintArea();
         }
       }

@@ -2,8 +2,7 @@ function progress () {
   var game = Games.findOne({});
   tickClock(game);
   if (isTimeOver(game)) {
-    changePhase(game);
-    if (phaseEquals(game.phase, DRAWING_PHASE)) {
+    if (phaseEquals(game.phase, GUESSING_PHASE)) {
       var players = Players.find({});
       var ids = new Array();
       players.forEach(function (player) {
@@ -11,7 +10,9 @@ function progress () {
         ids.push(player._id);
       });
       Subjects.remove({drawerId: {$not: {$in: ids}}});
+      Pictures.remove({});
     }
+    changePhase(game);
   }
 }
 
@@ -20,6 +21,7 @@ Meteor.startup(function () {
   Players.remove({});
   Subjects.remove({});
   Answers.remove({});
+  Pictures.remove({});
   Problems.remove({});
   
   Games.insert(new Game(DRAWING_PHASE));
@@ -43,6 +45,9 @@ Meteor.startup(function () {
   });
   Meteor.publish("answers", function () {
     return Answers.find({});
+  });
+  Meteor.publish("pictures", function () {
+    return Pictures.find({});
   });
 
   Meteor.setInterval(progress, 1*1000);

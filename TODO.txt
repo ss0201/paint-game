@@ -1,1 +1,2 @@
 rearrange arguments
+recreate a canvas so that the last line won't be drawn
