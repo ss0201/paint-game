@@ -47,7 +47,7 @@ function Player () {
   self.score = 0;
 }
 
-function Subject (text, drawerId, answered) {
+function Subject (text, drawerId) {
   var self = this;
   self.text = text;
   self.drawerId = drawerId;
