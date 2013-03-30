@@ -4,13 +4,41 @@ function Phase (name, duration) {
   self.duration = duration;
 }
 
-var DRAWING_PHASE = new Phase("Drawing", 10);
+var DRAWING_PHASE = new Phase("Drawing", 5);
 var GUESSING_PHASE = new Phase("Guessing", 5);
+
+function phaseEquals (left, right) {
+  return (left.name == right.name);
+}
+
+if (Meteor.isServer) {
+  function changePhase (game) {
+    var nextPhase = null;
+    if (phaseEquals(game.phase, DRAWING_PHASE)) {
+      nextPhase = GUESSING_PHASE;
+    } else if (phaseEquals(game.phase, GUESSING_PHASE)) {
+      nextPhase = DRAWING_PHASE;
+    }
+    Games.update(game._id, {$set: {phase: nextPhase, clock: nextPhase.duration}});
+  }
+}
 
 function Game (phase) {
   var self = this;
   self.phase = phase;
   self.clock = phase.duration;
+}
+
+if (Meteor.isServer) {
+  function tickClock (game) {
+    if (game.clock > 0) {
+      Games.update(game._id, {$set: {clock: game.clock - 1}});
+    }
+  }
+  
+  function isTimeOver (game) {
+    return (game.clock == 0);
+  }
 }
 
 function Player () {
@@ -38,37 +66,17 @@ function Problem (text) {
   self.text = text;
 }
 
-if (Meteor.isServer) {
-  function tickClock (game) {
-    if (game.clock > 0) {
-      Games.update(game._id, {$set: {clock: game.clock - 1}});
-    }
-  }
-  
-  function isTimeOver (game) {
-    return (game.clock == 0);
-  }
-  
-  function changePhase (game) {
-    var nextPhase = null;
-    switch (game.phase.name) {
-      case DRAWING_PHASE.name:
-        nextPhase = GUESSING_PHASE;
-        break;
-      case GUESSING_PHASE.name:
-        nextPhase = DRAWING_PHASE;
-        break;
-      default:
-        break;
-    }
-    Games.update(game._id, {$set: {phase: nextPhase, clock: nextPhase.duration}});
-  }
+function Picture (drawerId, image) {
+  var self = this;
+  self.drawerId = drawerId;
+  self.image = image;
 }
 
 var Games = new Meteor.Collection("games");
 var Players = new Meteor.Collection("players");
 var Subjects = new Meteor.Collection("subjects");
 var Answers = new Meteor.Collection("answers");
+var Pictures = new Meteor.Collection("pictures");
 if (Meteor.isServer) {
   var Problems = new Meteor.Collection(null);
 }
@@ -83,3 +91,9 @@ Meteor.methods({
     Players.update(answererId, {$set: {score: answerer.score}});
   }
 });
+
+if (Meteor.isClient) {
+  function sendPicture (drawerId, image) {
+    Pictures.insert(new Picture(drawerId, image));
+  }
+}

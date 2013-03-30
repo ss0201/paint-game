@@ -5,8 +5,8 @@
 <body>
   <h1>Paint Game!</h1>
   {{> game }}
-  {{> subject }}
-  {{> paint }}
+  {{> drawing }}
+  {{> guessing }}
 </body>
 
 <template name="game">
@@ -14,10 +14,28 @@
   {{ clock }}
 </template>
 
+<template name="drawing">
+  <div style="display:{{ drawing }}">
+    {{> subject }}
+    {{# constant }}
+      <div id="paint" style="position:relative; width:800px; height:600px; background:#FFFFFF; border:solid black 1px;" />
+    {{/ constant }}
+  </div>
+</template>
+
+<template name="guessing">
+  <div style="display:{{ guessing }}">
+    {{# each players }}
+    {{/ each }}
+  </div>
+</template>
+
 <template name="subject">
   {{ text }}
 </template>
 
-<template name="paint">
-  <div id="paint" style="position:relative; width:800px; height:600px; background:#FFFFFF; border:solid black 1px;" />
+<template name="picture">
+  {{ drawer }}
+  {{ image }}
+  {{ subject }}
 </template>

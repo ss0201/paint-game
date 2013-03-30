@@ -1,6 +1,16 @@
+function player () {
+  return Players.findOne(Session.get('playerId'));
+};
+
+function game () {
+  var me = player();
+//  return me && me.gameId && Games.findOne(me.gameId);
+  return Games.findOne({});
+};
+
+
 Template.game.phase = function () {
-  var game = Games.findOne({});
-  var phase = game && game.phase;
+  var phase = game() && game().phase;
   if (!phase) {
     return "Invalid Phase";
   }
@@ -8,8 +18,7 @@ Template.game.phase = function () {
 };
 
 Template.game.clock = function () {
-  var game = Games.findOne({});
-  var clock = game && game.clock;
+  var clock = game() && game().clock;
   if (!clock && clock != 0) {
     return "Invalid Clock";
   }
@@ -28,11 +37,48 @@ Template.subject.text = function () {
 };
 
 Meteor.startup(function () {
-	$("#paint").wPaint({
-    strokeStyle: "#000000",
-    lineWidthMin: 1,
-    lineWidthMax: 20,
-    lineWidth: 1,
-    menu: ["pencil", "eraser", "strokeColor", "lineWidth", "undo", "redo", "clear"]
+  $(document).ready(function () {
+	  $("#paint").wPaint({
+		strokeStyle: "#000000",
+		lineWidthMin: 1,
+		lineWidthMax: 20,
+		lineWidth: 1,
+		menu: ["pencil", "eraser", "strokeColor", "lineWidth", "undo", "redo", "clear"]
+	  });
   });
 });
+
+Template.drawing.drawing = function() {
+  return getDisplayOption(DRAWING_PHASE);
+};
+
+Template.guessing.guessing = function() {
+  return getDisplayOption(GUESSING_PHASE);
+};
+
+function getDisplayOption (phase) {
+  var currentPhase = game() && game().phase;
+  return (currentPhase && phaseEquals(currentPhase, phase) ? "inline" : "none");
+}
+
+Template.guessing.players = function () {
+  return Players.find({});
+};
+
+Template.picture.drawer = function () {
+  return this._id;
+};
+
+Template.picture.image = function () {
+  var picture = Pictures.findOne({drawerId: this._id});
+  return picture.image;
+};
+
+Template.picture.subject = function () {
+  var subject = Subjects.findOne({drawerId: this._id});
+  return subject.text;
+};
+
+function clearPaintArea () {
+  $("#paint").wPaint("clear");
+}

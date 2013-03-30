@@ -2,14 +2,16 @@ function progress () {
   var game = Games.findOne({});
   tickClock(game);
   if (isTimeOver(game)) {
-    var players = Players.find({});
-    var ids = new Array();
-    players.forEach(function (player) {
-      Meteor.call("requireSubject", player._id);
-      ids.push(player._id);
-    });
-    Subjects.remove({drawerId: {$not: {$in: ids}}});
     changePhase(game);
+    if (phaseEquals(game.phase, DRAWING_PHASE)) {
+      var players = Players.find({});
+      var ids = new Array();
+      players.forEach(function (player) {
+        Meteor.call("requireSubject", player._id);
+        ids.push(player._id);
+      });
+      Subjects.remove({drawerId: {$not: {$in: ids}}});
+    }
   }
 }
 
