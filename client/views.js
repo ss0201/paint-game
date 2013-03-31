@@ -28,7 +28,8 @@ Template.game.clock = function () {
 };
 
 Template.subject.text = function () {
-  var subject = Subjects.findOne({drawerId: Session.get("playerId")});
+  var drawerId = (this && this.drawerId ? this.drawerId : Session.get("playerId"));
+  var subject = Subjects.findOne({drawerId: drawerId});
   var text = subject && subject.text;
   if (!text) {
     return "No Subject";
@@ -67,15 +68,6 @@ Template.guessing.pictures = function () {
 
 Template.picture.drawer = function () {
   return this.drawerId;
-};
-
-Template.picture.subject = function () {
-  var subject = Subjects.findOne({drawerId: this.drawerId});
-  var text = subject && subject.text;
-  if (!text) {
-    return "Invalid Subject";
-  }
-  return text;
 };
 
 function clearPaintArea () {
