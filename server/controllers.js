@@ -2,7 +2,9 @@ function progress () {
   var game = Games.findOne({});
   tickClock(game);
   if (isTimeOver(game)) {
-    if (phaseEquals(game.phase, GUESSING_PHASE)) {
+    var phase = game.phase;
+    changePhase(game);
+    if (phaseEquals(phase, GUESSING_PHASE)) {
       var players = Players.find({});
       var ids = new Array();
       players.forEach(function (player) {
@@ -12,7 +14,6 @@ function progress () {
       Subjects.remove({drawerId: {$not: {$in: ids}}});
       Pictures.remove({});
     }
-    changePhase(game);
   }
 }
 

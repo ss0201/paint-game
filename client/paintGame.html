@@ -10,8 +10,10 @@
 </body>
 
 <template name="game">
-  {{ phase }}
-  {{ clock }}
+  <div>
+    {{ phase }}
+    {{ clock }}
+  </div>
 </template>
 
 <template name="drawing">
@@ -36,7 +38,20 @@
 </template>
 
 <template name="picture">
-  {{ drawer }}
-  <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
-  {{ subject }}
+  <div>
+    {{ drawer }}
+  </div>
+  <div>
+    <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
+  </div>
+  <div>
+    {{# if answered }}
+      {{ subject }}
+    {{ else }}
+      <div id="answer">
+        <input id="answerInput" type="text" />
+        <button name="submit" class="submit">Guess!</button>
+      </div>
+    {{/ if }}
+  </div>
 </template>

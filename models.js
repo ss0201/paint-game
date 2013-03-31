@@ -82,24 +82,22 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  answer: function (subjectId, answererId, text) {
+  answer: function (answererId, subjectId, text) {
     var subject = Subjects.findOne({_id: subjectId});
     if (subject.text == text) {
       Subjects.update(subjectId, {$set: {answered: true}});
     }
     var answerer = Players.findOne({_id: answererId});
     Players.update(answererId, {$set: {score: answerer.score}});
-  }
-});
-
-Meteor.methods({
+  },
+  
   requireSubject: function (drawerId) {
     if (Meteor.isServer) {
       var problem = getRandomProblem();
       if (Subjects.find({drawerId: drawerId}).count() == 0) {
         Subjects.insert(new Subject(problem.text, drawerId));
       } else {
-        Subjects.update({drawerId: drawerId}, {$set: {text: problem.text}});
+        Subjects.update({drawerId: drawerId}, {$set: {text: problem.text, answered: false}});
       }
     }
   },

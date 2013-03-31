@@ -1,5 +1,5 @@
 function player () {
-  return Players.findOne(Session.get('playerId'));
+  return Players.findOne(Session.get("playerId"));
 };
 
 function game () {
@@ -24,14 +24,14 @@ Template.game.clock = function () {
   }
   var min = Math.floor(clock / 60);
   var sec = clock % 60;
-  return min + ':' + (sec < 10 ? '0' : '') + sec;
+  return min + ":" + (sec < 10 ? "0" : "") + sec;
 };
 
 Template.subject.text = function () {
   var subject = Subjects.findOne({drawerId: Session.get("playerId")});
   var text = subject && subject.text;
   if (!text) {
-    return "Invalid Subject";
+    return "No Subject";
   }
   return text;
 };
@@ -90,3 +90,20 @@ Template.picture.subject = function () {
 function clearPaintArea () {
   $("#paint").wPaint("clear");
 }
+
+Template.picture.answered = function () {
+  var subject = Subjects.findOne({drawerId: this._id});
+  return (subject && subject.answered);
+};
+
+Template.picture.events({
+  "click button, keyup input": function (evt) {
+    var textbox = $("#answer input");
+    if (evt.type === "click" || (evt.type === "keyup" && evt.which === 13)) {
+      var subject = Subjects.findOne({drawerId: this._id});
+      Meteor.call("answer", player(), subject._id, textbox.val());
+      textbox.val("");
+      textbox.focus();
+    }
+  }
+});
