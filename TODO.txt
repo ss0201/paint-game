@@ -1,6 +1,0 @@
-rearrange arguments
-recreate a canvas so that the last line won't be drawn
-mvc: correct position
-use picture ids instead of player ids for subject etc.
-accounts (prevent recreation of a user with reload)
-score
