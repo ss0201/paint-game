@@ -92,7 +92,7 @@ Template.picture.events({
     var textbox = $("#answer input");
     if (evt.type === "click" || (evt.type === "keyup" && evt.which === 13)) {
       var subject = Subjects.findOne({drawerId: this.drawerId});
-      Meteor.call("answer", player(), subject._id, textbox.val());
+      Meteor.call("answer", player(), subject, textbox.val());
       textbox.val("");
       textbox.focus();
     }
