@@ -3,7 +3,7 @@ function player () {
 };
 
 function game () {
-  var me = player();
+//  var me = player();
 //  return me && me.gameId && Games.findOne(me.gameId);
   return Games.findOne({});
 };
@@ -61,25 +61,20 @@ function getDisplayOption (phase) {
   return (currentPhase && phaseEquals(currentPhase, phase) ? "block" : "none");
 }
 
-Template.guessing.players = function () {
-  return Players.find({});
+Template.guessing.pictures = function () {
+  return Pictures.find({});
 };
 
 Template.picture.drawer = function () {
-  return this._id;
+  return this.drawerId;
 };
 
 Template.picture.image = function () {
-  var picture = Pictures.findOne({drawerId: this._id});
-  var image = picture && picture.image;
-  if (!image) {
-    return;
-  }
-  return image;
+  return this.image;
 };
 
 Template.picture.subject = function () {
-  var subject = Subjects.findOne({drawerId: this._id});
+  var subject = Subjects.findOne({drawerId: this.drawerId});
   var text = subject && subject.text;
   if (!text) {
     return "Invalid Subject";
@@ -92,7 +87,7 @@ function clearPaintArea () {
 }
 
 Template.picture.answered = function () {
-  var subject = Subjects.findOne({drawerId: this._id});
+  var subject = Subjects.findOne({drawerId: this.drawerId});
   return (subject && subject.answered);
 };
 
@@ -100,7 +95,7 @@ Template.picture.events({
   "click button, keyup input": function (evt) {
     var textbox = $("#answer input");
     if (evt.type === "click" || (evt.type === "keyup" && evt.which === 13)) {
-      var subject = Subjects.findOne({drawerId: this._id});
+      var subject = Subjects.findOne({drawerId: this.drawerId});
       Meteor.call("answer", player(), subject._id, textbox.val());
       textbox.val("");
       textbox.focus();
