@@ -69,10 +69,6 @@ Template.picture.drawer = function () {
   return this.drawerId;
 };
 
-Template.picture.image = function () {
-  return this.image;
-};
-
 Template.picture.subject = function () {
   var subject = Subjects.findOne({drawerId: this.drawerId});
   var text = subject && subject.text;
