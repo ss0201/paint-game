@@ -58,7 +58,7 @@ Template.guessing.guessing = function() {
 
 function getDisplayOption (phase) {
   var currentPhase = game() && game().phase;
-  return (currentPhase && phaseEquals(currentPhase, phase) ? "inline" : "none");
+  return (currentPhase && phaseEquals(currentPhase, phase) ? "block" : "none");
 }
 
 Template.guessing.players = function () {

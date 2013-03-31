@@ -28,7 +28,9 @@
 <template name="guessing">
   <div style="display:{{ guessing }}">
     {{# each players }}
-      {{> picture }}
+      <div style="display:block">
+        {{> picture }}
+      </div>
     {{/ each }}
   </div>
 </template>
