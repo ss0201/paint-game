@@ -28,8 +28,7 @@ Template.game.clock = function () {
 };
 
 Template.subject.text = function () {
-  var drawerId = (this && this.drawerId ? this.drawerId : Session.get("playerId"));
-  var subject = Subjects.findOne({drawerId: drawerId});
+  var subject = Subjects.findOne({drawerId: this + ""});
   var text = subject && subject.text;
   if (!text) {
     return "No Subject";
@@ -40,11 +39,11 @@ Template.subject.text = function () {
 Meteor.startup(function () {
   $(document).ready(function () {
 	  $("#paint").wPaint({
-		strokeStyle: "#000000",
-		lineWidthMin: 1,
-		lineWidthMax: 20,
-		lineWidth: 1,
-		menu: ["pencil", "eraser", "strokeColor", "lineWidth", "undo", "redo", "clear"]
+      strokeStyle: "#000000",
+      lineWidthMin: 1,
+      lineWidthMax: 20,
+      lineWidth: 1,
+      menu: ["pencil", "eraser", "strokeColor", "lineWidth", "undo", "redo", "clear"]
 	  });
   });
 });
@@ -53,18 +52,22 @@ Template.drawing.drawing = function() {
   return getDisplayOption(DRAWING_PHASE);
 };
 
+Template.drawing.drawerData = function () {
+  return Session.get("playerId");
+};
+
 Template.guessing.guessing = function() {
   return getDisplayOption(GUESSING_PHASE);
+};
+
+Template.guessing.pictures = function () {
+  return Pictures.find({});
 };
 
 function getDisplayOption (phase) {
   var currentPhase = game() && game().phase;
   return (currentPhase && phaseEquals(currentPhase, phase) ? "block" : "none");
 }
-
-Template.guessing.pictures = function () {
-  return Pictures.find({});
-};
 
 Template.picture.drawer = function () {
   return this.drawerId;

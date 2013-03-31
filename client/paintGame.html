@@ -18,7 +18,7 @@
 
 <template name="drawing">
   <div style="display:{{ drawing }}">
-    {{> subject }}
+    {{> subject drawerData }}
     {{# constant }}
       <div id="paint" style="position:relative; width:800px; height:600px; background:#FFFFFF; border:solid black 1px;" />
     {{/ constant }}
@@ -49,7 +49,7 @@
     <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
   </div>
   {{# if answered }}
-    {{> subject }}
+    {{> subject drawerId }}
   {{ else }}
     {{# constant }}
       <div>
