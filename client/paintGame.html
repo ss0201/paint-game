@@ -28,7 +28,7 @@
 <template name="guessing">
   <div style="display:{{ guessing }}">
     {{# each pictures }}
-      <div style="display:block">
+      <div style="float:left; margin:0px 10px">
         {{> picture }}
       </div>
     {{/ each }}
@@ -36,7 +36,9 @@
 </template>
 
 <template name="subject">
-  {{ text }}
+  <div>
+    {{ text }}
+  </div>
 </template>
 
 <template name="picture">
@@ -46,14 +48,12 @@
   <div>
     <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
   </div>
-  <div>
-    {{# if answered }}
-      {{> subject }}
-    {{ else }}
-      <div id="answer">
-        <input id="answerInput" type="text" />
-        <button name="submit" class="submit">Guess!</button>
-      </div>
-    {{/ if }}
-  </div>
+  {{# if answered }}
+    {{> subject }}
+  {{ else }}
+    <div>
+      <input id="answerInput" type="text" />
+      <button name="submit" class="submit">Guess!</button>
+    </div>
+  {{/ if }}
 </template>

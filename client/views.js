@@ -81,7 +81,7 @@ Template.picture.answered = function () {
 
 Template.picture.events({
   "click button, keyup input": function (evt) {
-    var textbox = $("#answer input");
+    var textbox = $("#answerInput");
     if (evt.type === "click" || (evt.type === "keyup" && evt.which === 13)) {
       var subject = Subjects.findOne({drawerId: this.drawerId});
       Meteor.call("answer", player(), subject, textbox.val());
