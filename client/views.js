@@ -80,12 +80,11 @@ Template.picture.answered = function () {
 };
 
 Template.picture.events({
-  "click button, keyup input": function (evt) {
-    var textbox = $("#answerInput");
-    if (evt.type === "click" || (evt.type === "keyup" && evt.which === 13)) {
-      var subject = Subjects.findOne({drawerId: this.drawerId});
-      Meteor.call("answer", player(), subject, textbox.val());
-      textbox.val("");
+  "click button, keyup input": function (event, template) {
+    var textbox = template.find("#answerInput");
+    if (event.type === "click" || (event.type === "keyup" && event.which === 13)) {
+      Meteor.call("answer", Session.get("playerId"), this.drawerId, textbox.value);
+      textbox.value = "";
       textbox.focus();
     }
   }

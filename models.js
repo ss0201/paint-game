@@ -82,11 +82,15 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  answer: function (answerer, subject, text) {
-    if (subject.text == text) {
-      Subjects.update(subject._id, {$set: {answered: true}});
+  answer: function (answererId, drawerId, text) {
+    if (Meteor.isServer) {
+      var subject = Subjects.find({drawerId: drawerId});
+      var answerer = Players.find(answererId);
+      if (subject.text == text) {
+        Subjects.update(subject._id, {$set: {answered: true}});
+      }
+      Players.update(answerer._id, {$set: {score: answerer.score}});
     }
-    Players.update(answerer._id, {$set: {score: answerer.score}});
   },
   
   requireSubject: function (drawerId) {

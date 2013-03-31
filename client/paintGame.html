@@ -51,9 +51,11 @@
   {{# if answered }}
     {{> subject }}
   {{ else }}
-    <div>
-      <input id="answerInput" type="text" />
-      <button name="submit" class="submit">Guess!</button>
-    </div>
+    {{# constant }}
+      <div>
+        <input id="answerInput" type="text" />
+        <button name="submit" class="submit">Guess!</button>
+      </div>
+    {{/ constant }}
   {{/ if }}
 </template>
