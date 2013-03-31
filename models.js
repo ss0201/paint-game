@@ -47,10 +47,10 @@ function Player () {
   self.score = 0;
 }
 
-function Subject (text, drawerId) {
+function Subject (drawerId, text) {
   var self = this;
-  self.text = text;
   self.drawerId = drawerId;
+  self.text = text;
   self.answered = false;
 }
 
@@ -95,7 +95,7 @@ Meteor.methods({
     if (Meteor.isServer) {
       var problem = getRandomProblem();
       if (Subjects.find({drawerId: drawerId}).count() == 0) {
-        Subjects.insert(new Subject(problem.text, drawerId));
+        Subjects.insert(new Subject(drawerId, problem.text));
       } else {
         Subjects.update({drawerId: drawerId}, {$set: {text: problem.text, answered: false}});
       }
