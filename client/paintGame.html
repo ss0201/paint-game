@@ -7,6 +7,7 @@
   {{> game }}
   {{> drawing }}
   {{> guessing }}
+  {{> players }}
 </body>
 
 <template name="game">
@@ -39,6 +40,7 @@
       </div>
     {{/ each }}
   </div>
+  <div style="clear:both" />
 </template>
 
 <template name="subject">
@@ -66,4 +68,12 @@
       </div>
     {{/ if }}
   {{/ if }}
+</template>
+
+<template name="players">
+  <div>
+    {{# each players }}
+      {{> player _id }}
+    {{/ each }}
+  </div>
 </template>

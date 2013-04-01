@@ -108,3 +108,7 @@ Template.picture.events({
     }
   }
 });
+
+Template.players.players = function () {
+  return Players.find({});
+};
