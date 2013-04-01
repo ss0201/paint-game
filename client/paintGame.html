@@ -53,13 +53,17 @@
     <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
   </div>
   {{# if answered }}
-    {{> subject drawerId }}
+    <div style="color:red">
+      {{> subject drawerId }}
+    </div>
   {{ else }}
-    {{# constant }}
+    {{# if mine }}
+      {{> subject drawerId }}
+    {{ else }}
       <div>
         <input id="answerInput" type="text" />
         <button name="submit" class="submit">Guess!</button>
       </div>
-    {{/ constant }}
+    {{/ if }}
   {{/ if }}
 </template>

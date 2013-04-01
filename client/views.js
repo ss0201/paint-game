@@ -1,7 +1,3 @@
-function player () {
-  return Players.findOne(Session.get("playerId"));
-};
-
 function game () {
 //  var me = player();
 //  return me && me.gameId && Games.findOne(me.gameId);
@@ -96,6 +92,10 @@ function clearPaintArea () {
 Template.picture.answered = function () {
   var subject = Subjects.findOne({drawerId: this.drawerId});
   return (subject && subject.answered);
+};
+
+Template.picture.mine = function () {
+  return (this.drawerId == Session.get("playerId"));
 };
 
 Template.picture.events({
