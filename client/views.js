@@ -27,6 +27,22 @@ Template.game.clock = function () {
   return min + ":" + (sec < 10 ? "0" : "") + sec;
 };
 
+Template.player._name = function () {
+  var player = Players.findOne(this + "");
+  if (!player) {
+    return "Invalid player";
+  }
+  return player._id;
+};
+
+Template.player.score = function () {
+  var player = Players.findOne(this + "");
+  if (!player) {
+    return "Invalid player";
+  }
+  return player.score + " point" + (player.score > 1 ? "s" : "");
+};
+
 Template.subject.text = function () {
   var subject = Subjects.findOne({drawerId: this + ""});
   var text = subject && subject.text;

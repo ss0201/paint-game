@@ -16,6 +16,12 @@
   </div>
 </template>
 
+<template name="player">
+  <div>
+    {{ _name }} : {{ score }}
+  </div>
+</template>
+
 <template name="drawing">
   <div style="display:{{ drawing }}">
     {{> subject drawerData }}
@@ -42,9 +48,7 @@
 </template>
 
 <template name="picture">
-  <div>
-    {{ drawer }}
-  </div>
+  {{> player drawerId }}
   <div>
     <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
   </div>
