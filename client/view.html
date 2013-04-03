@@ -58,6 +58,8 @@
 <template name="gameStatus">
   <div>
     {{ _name }}
+  </div>
+  <div>
     {{ phase }}
     {{ clock }}
   </div>
@@ -71,10 +73,15 @@
 
 <template name="drawing">
   {{# if show }}
-    {{> subject drawerData }}
-    {{# constant }}
-      {{> paint }}
-    {{/ constant }}
+    <div style="margin:10px 0px">
+      <div>
+        You are drawing:
+      </div>
+      {{> subject drawerData }}
+      {{# constant }}
+        {{> paint }}
+      {{/ constant }}
+    </div>
   {{/ if }}
 </template>
 
@@ -84,12 +91,14 @@
 
 <template name="guessing">
   {{# if show }}
-    {{# each pictures }}
-      <div style="float:left; margin:0px 10px">
-        {{> picture }}
-      </div>
-    {{/ each }}
-    <div style="clear:both" />
+    <div style="margin:10px 0px">
+      {{# each pictures }}
+        <div style="float:left; margin:0px 10px">
+          {{> picture }}
+        </div>
+      {{/ each }}
+      <div style="clear:both" />
+    </div>
   {{/ if }}
 </template>
 
@@ -121,7 +130,10 @@
 </template>
 
 <template name="players">
-  <div>
+  <div style="margin:10px 0px">
+    <div>
+      Players:
+    </div>
     {{# each players }}
       {{> player }}
     {{/ each }}
