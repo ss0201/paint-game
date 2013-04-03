@@ -64,9 +64,13 @@
   {{# if show }}
     {{> subject drawerData }}
     {{# constant }}
-      <div id="paint" style="position:relative; width:800px; height:600px; background:#FFFFFF; border:solid black 1px;" />
+      {{> paint }}
     {{/ constant }}
   {{/ if }}
+</template>
+
+<template name="paint">
+  <div id="paint" style="position:relative; width:800px; height:600px; background:#FFFFFF; border:solid black 1px;" />
 </template>
 
 <template name="guessing">

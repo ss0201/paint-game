@@ -4,7 +4,7 @@ function Phase (name, duration) {
   self.duration = duration;
 }
 
-var DRAWING_PHASE = new Phase("Drawing", 5);
+var DRAWING_PHASE = new Phase("Drawing", 10);
 var GUESSING_PHASE = new Phase("Guessing", 5);
 
 function phaseEquals (left, right) {

@@ -85,24 +85,22 @@ Template.subject.text = function () {
   return text;
 };
 
-Meteor.startup(function () {
-  $(document).ready(function () {
-	  $("#paint").wPaint({
-      strokeStyle: "#000000",
-      lineWidthMin: 1,
-      lineWidthMax: 20,
-      lineWidth: 1,
-      menu: ["pencil", "eraser", "strokeColor", "lineWidth", "undo", "redo", "clear"]
-	  });
-  });
-});
-
 Template.drawing.show = function() {
   return isPhase(DRAWING_PHASE);
 };
 
 Template.drawing.drawerData = function () {
   return Session.get("playerId");
+};
+
+Template.paint.created = function () {
+  $("#paint").wPaint({
+    strokeStyle: "#000000",
+    lineWidthMin: 1,
+    lineWidthMax: 20,
+    lineWidth: 1,
+    menu: ["pencil", "eraser", "strokeColor", "lineWidth", "undo", "redo", "clear"]
+  });
 };
 
 Template.guessing.show = function() {
