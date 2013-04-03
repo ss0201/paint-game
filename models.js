@@ -23,10 +23,11 @@ if (Meteor.isServer) {
   }
 }
 
-function Game (phase) {
+function Game (name) {
   var self = this;
-  self.phase = phase;
-  self.clock = phase.duration;
+  self.name = name;
+  self.phase = DRAWING_PHASE;
+  self.clock = self.phase.duration;
 }
 
 if (Meteor.isServer) {
@@ -41,24 +42,26 @@ if (Meteor.isServer) {
   }
 }
 
-function Player () {
+function Player (userId, gameId) {
   var self = this;
-  self.gameId = null;
+  self.userId = userId;
+  self.gameId = gameId;
   self.score = 0;
 }
 
-function Subject (drawerId, text) {
+function Subject (drawerId, gameId, text) {
   var self = this;
   self.drawerId = drawerId;
+  self.gameId = gameId;
   self.text = text;
   self.answered = false;
 }
 
-function Answer (text, drawerId, answererId) {
+function Picture (drawerId, gameId, image) {
   var self = this;
-  self.text = text;
   self.drawerId = drawerId;
-  self.answererId = answererId;
+  self.gameId = gameId;
+  self.image = image;
 }
 
 function Problem (text) {
@@ -66,47 +69,54 @@ function Problem (text) {
   self.text = text;
 }
 
-function Picture (drawerId, image) {
-  var self = this;
-  self.drawerId = drawerId;
-  self.image = image;
-}
-
 var Games = new Meteor.Collection("games");
 var Players = new Meteor.Collection("players");
 var Subjects = new Meteor.Collection("subjects");
-var Answers = new Meteor.Collection("answers");
 var Pictures = new Meteor.Collection("pictures");
 if (Meteor.isServer) {
   var Problems = new Meteor.Collection(null);
 }
 
-Meteor.methods({
-  answer: function (answererId, drawerId, text) {
-    if (Meteor.isServer) {
-      var subject = Subjects.findOne({drawerId: drawerId});
-      var answerer = Players.findOne(answererId);
-      if (subject.text == text) {
-        Subjects.update(subject._id, {$set: {answered: true}});
-        Players.update(answerer._id, {$set: {score: answerer.score + 1}});
-      }
-    }
-  },
-  
-  requireSubject: function (drawerId) {
-    if (Meteor.isServer) {
-      var problem = getRandomProblem();
-      if (Subjects.find({drawerId: drawerId}).count() == 0) {
-        Subjects.insert(new Subject(drawerId, problem.text));
-      } else {
-        Subjects.update({drawerId: drawerId}, {$set: {text: problem.text, answered: false}});
-      }
-    }
-  },
-  
-  sendPicture: function (drawerId, image) {
-    if (Meteor.isServer) {
-      Pictures.insert(new Picture(drawerId, image));
-    }
-  }
-});
+if (Meteor.isClient) {
+  Deps.autorun(function () {
+    Meteor.subscribe("games");
+  });
+}
+
+if (Meteor.isServer) {
+  Meteor.startup(function () {
+    Meteor.publish("games", function () {
+      return Games.find({});
+    });
+    Meteor.publish("players", function (gameId) {
+      return Players.find({gameId: gameId});
+    });
+    Meteor.publish("subjects", function (gameId, playerId) {
+      return Subjects.find(
+        {$and: [
+          {gameId: gameId},
+          {$or: [
+            {drawerId: playerId},
+            {answered: true}
+          ]}
+        ]}
+      );
+    });
+    Meteor.publish("pictures", function (gameId) {
+      return Pictures.find({gameId: gameId});
+    });
+
+    Games.remove({});
+    Players.remove({});
+    Subjects.remove({});
+    Pictures.remove({});
+    Problems.remove({});
+    
+    Games.insert(new Game("a"));
+    Problems.insert(new Problem("a"));
+    Problems.insert(new Problem("b"));
+    Problems.insert(new Problem("c"));
+    Problems.insert(new Problem("d"));
+    Problems.insert(new Problem("e"));
+  });
+}

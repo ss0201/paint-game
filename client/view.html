@@ -7,18 +7,48 @@
 </body>
 
 <template name="page">
+  <h1>Paint Game!</h1>
+  {{# if notInGame }}
+    {{> lobby }}
+  {{ else }}
+    {{> game }}
+  {{/ if }}
+</template>
+
+<template name="lobby">
   <div align="right">
     {{ loginButtons align="right" }}
   </div>
-  <h1>Paint Game!</h1>
-  {{> game }}
+  <div>
+    <input id="name" type="text" />
+    <button id="newGame">New Game</button>
+  </div>
+  <div style="margin-top:10px">
+    {{# each games }}
+      {{> gameInfo }}
+    {{/ each }}
+  </div>
+</template>
+
+<template name="gameInfo">
+  <div>
+    {{# if currentUser }}
+      <button id="join">Join</button>
+    {{/ if }}
+    {{ name }}
+  </div>
+</template>
+
+<template name="game">
+  {{> gameStatus }}
   {{> drawing }}
   {{> guessing }}
   {{> players }}
 </template>
 
-<template name="game">
+<template name="gameStatus">
   <div>
+    {{ _name }}
     {{ phase }}
     {{ clock }}
   </div>
@@ -71,7 +101,7 @@
     {{ else }}
       <div>
         <input id="answerInput" type="text" />
-        <button name="submit" class="submit">Guess!</button>
+        <button>Guess!</button>
       </div>
     {{/ if }}
   {{/ if }}

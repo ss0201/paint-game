@@ -2,13 +2,47 @@ Accounts.ui.config({
   passwordSignupFields: "USERNAME_ONLY"
 });
 
-function game () {
-//  var me = player();
-//  return me && me.gameId && Games.findOne(me.gameId);
-  return Games.findOne({});
+Template.page.notInGame = function () {
+  return (!Session.get("gameId"));
 };
 
-Template.game.phase = function () {
+Template.lobby.events({
+  "click #newGame": function (event, template) {
+    var name = template.find("#name").value;
+    Meteor.call("createGame", name, function (error, result) {
+      var gameid = result;
+      if (error) {
+        console.log(error);
+      } else {
+        callJoinGame(gameId);
+      }
+    });
+  }
+});
+
+Template.lobby.games = function () {
+  return Games.find({});
+};
+
+Template.gameInfo.events({
+  "click #join": function (event, template) {
+    callJoinGame(this._id);
+  }
+});
+
+function game () {
+  return Games.findOne(Session.get("gameId"));
+}
+
+Template.gameStatus._name = function () {
+  var name = game() && game().name;
+  if (!name) {
+    return "Invalid Name";
+  }
+  return name;
+};
+
+Template.gameStatus.phase = function () {
   var phase = game() && game().phase;
   if (!phase) {
     return "Invalid Phase";
@@ -16,7 +50,7 @@ Template.game.phase = function () {
   return phase.name;
 };
 
-Template.game.clock = function () {
+Template.gameStatus.clock = function () {
   var clock = game() && game().clock;
   if (!clock && clock != 0) {
     return "Invalid Clock";
@@ -88,6 +122,10 @@ Template.picture.drawer = function () {
   return this.drawerId;
 };
 
+function getImageInPaintArea () {
+  return $("#paint").wPaint("image");
+}
+
 function clearPaintArea () {
   $("#paint").wPaint("clear");
 }
@@ -103,8 +141,8 @@ Template.picture.mine = function () {
 
 Template.picture.events({
   "click button, keydown input": function (event, template) {
-    var textbox = template.find("#answerInput");
     if (event.type === "click" || (event.type === "keydown" && String.fromCharCode( event.which ) === "\r")) {
+      var textbox = template.find("#answerInput");
       Meteor.call("answer", Session.get("playerId"), this.drawerId, textbox.value);
       textbox.value = "";
       textbox.focus();
