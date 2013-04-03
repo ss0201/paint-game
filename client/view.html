@@ -19,24 +19,31 @@
   <div align="right">
     {{ loginButtons align="right" }}
   </div>
-  <div style="margin:10px 0px">
-    <div>
-      <label id="playerNameLabel" for="playerName">Your Name:</label>
+  {{# unless currentUser }}
+    Please Sign in. (See right top corner.)
+  {{/ unless }}
+  {{# if currentUser }}
+    <div style="margin:10px 0px">
+      <div>
+        <label id="playerNameLabel" for="playerName">Your Name:</label>
+      </div>
+      <input id="playerName" type="text" />
     </div>
-    <input id="playerName" type="text" />
-  </div>
+  {{/ if }}
   <div style="margin:10px 0px">
     {{# each games }}
       {{> gameInfo }}
     {{/ each }}
   </div>
-  <div style="margin:10px 0px">
-    <div>
-      <label for="gameName">Game Name:</label>
+  {{# if currentUser }}
+    <div style="margin:10px 0px">
+      <div>
+        <label for="gameName">Game Name:</label>
+      </div>
+      <input id="gameName" type="text" />
+      <button id="newGame">New Game</button>
     </div>
-    <input id="gameName" type="text" />
-    <button id="newGame">New Game</button>
-  </div>
+  {{/ if }}
 </template>
 
 <template name="gameInfo">
