@@ -124,10 +124,6 @@ function getImageInPaintArea () {
   return $("#paint").wPaint("image");
 }
 
-function clearPaintArea () {
-  $("#paint").wPaint("clear");
-}
-
 Template.picture.answered = function () {
   var subject = Subjects.findOne({drawerId: this.drawerId});
   return (subject && subject.answered);
