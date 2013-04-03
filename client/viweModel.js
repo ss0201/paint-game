@@ -97,25 +97,25 @@ Meteor.startup(function () {
   });
 });
 
-Template.drawing.drawing = function() {
-  return getDisplayOption(DRAWING_PHASE);
+Template.drawing.show = function() {
+  return isPhase(DRAWING_PHASE);
 };
 
 Template.drawing.drawerData = function () {
   return Session.get("playerId");
 };
 
-Template.guessing.guessing = function() {
-  return getDisplayOption(GUESSING_PHASE);
+Template.guessing.show = function() {
+  return isPhase(GUESSING_PHASE);
 };
 
 Template.guessing.pictures = function () {
   return Pictures.find({});
 };
 
-function getDisplayOption (phase) {
+function isPhase (phase) {
   var currentPhase = game() && game().phase;
-  return (currentPhase && phaseEquals(currentPhase, phase) ? "block" : "none");
+  return (currentPhase && phaseEquals(currentPhase, phase));
 }
 
 Template.picture.drawer = function () {

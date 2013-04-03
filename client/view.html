@@ -61,23 +61,23 @@
 </template>
 
 <template name="drawing">
-  <div style="display:{{ drawing }}">
+  {{# if show }}
     {{> subject drawerData }}
     {{# constant }}
       <div id="paint" style="position:relative; width:800px; height:600px; background:#FFFFFF; border:solid black 1px;" />
     {{/ constant }}
-  </div>
+  {{/ if }}
 </template>
 
 <template name="guessing">
-  <div style="display:{{ guessing }}">
+  {{# if show }}
     {{# each pictures }}
       <div style="float:left; margin:0px 10px">
         {{> picture }}
       </div>
     {{/ each }}
-  </div>
-  <div style="clear:both" />
+    <div style="clear:both" />
+  {{/ if }}
 </template>
 
 <template name="subject">
