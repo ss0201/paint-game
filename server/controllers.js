@@ -56,10 +56,5 @@ Meteor.startup(function () {
 
 function getRandomProblem () {
   var problems = Problems.find({});
-  var random = getRandomValue(0, problems.count() - 1);
-  return problems.fetch()[random];
-}
-
-function getRandomValue (min, max) {
-  return Math.floor((Math.random() * max) + min);
+  return Random.choice(problems.fetch());
 }
