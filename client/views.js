@@ -1,9 +1,12 @@
+Accounts.ui.config({
+  passwordSignupFields: "USERNAME_ONLY"
+});
+
 function game () {
 //  var me = player();
 //  return me && me.gameId && Games.findOne(me.gameId);
   return Games.findOne({});
 };
-
 
 Template.game.phase = function () {
   var phase = game() && game().phase;
@@ -99,9 +102,9 @@ Template.picture.mine = function () {
 };
 
 Template.picture.events({
-  "click button, keyup input": function (event, template) {
+  "click button, keydown input": function (event, template) {
     var textbox = template.find("#answerInput");
-    if (event.type === "click" || (event.type === "keyup" && event.which === 13)) {
+    if (event.type === "click" || (event.type === "keydown" && String.fromCharCode( event.which ) === "\r")) {
       Meteor.call("answer", Session.get("playerId"), this.drawerId, textbox.value);
       textbox.value = "";
       textbox.focus();

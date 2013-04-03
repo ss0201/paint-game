@@ -3,12 +3,19 @@
 </head>
 
 <body>
+  {{> page }}
+</body>
+
+<template name="page">
+  <div align="right">
+    {{ loginButtons align="right" }}
+  </div>
   <h1>Paint Game!</h1>
   {{> game }}
   {{> drawing }}
   {{> guessing }}
   {{> players }}
-</body>
+</template>
 
 <template name="game">
   <div>
