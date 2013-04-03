@@ -59,7 +59,7 @@ Template.gameStatus.phase = function () {
   if (!phase) {
     return "Invalid Phase";
   }
-  return phase.name;
+  return phase.name + " Phase";
 };
 
 Template.gameStatus.clock = function () {

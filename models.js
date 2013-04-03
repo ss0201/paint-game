@@ -113,7 +113,6 @@ if (Meteor.isServer) {
     Pictures.remove({});
     Problems.remove({});
     
-    Games.insert(new Game("a"));
     Problems.insert(new Problem("a"));
     Problems.insert(new Problem("b"));
     Problems.insert(new Problem("c"));
