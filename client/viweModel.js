@@ -8,15 +8,16 @@ Template.page.notInGame = function () {
 
 Template.lobby.events({
   "click #newGame": function (event, template) {
-    var name = template.find("#name").value;
-    Meteor.call("createGame", name, function (error, result) {
-      var gameid = result;
-      if (error) {
-        console.log(error);
-      } else {
-        callJoinGame(gameId);
-      }
-    });
+    if (checkNameSupplied()) {
+      Meteor.call("createGame", template.find("#gameName").value, function (error, result) {
+        var gameId = result;
+        if (error) {
+          console.log(error);
+        } else {
+          callJoinGame(gameId, $("#playerName").val());
+        }
+      });
+    }
   }
 });
 
@@ -26,9 +27,20 @@ Template.lobby.games = function () {
 
 Template.gameInfo.events({
   "click #join": function (event, template) {
-    callJoinGame(this._id);
+    if (checkNameSupplied()) {
+      callJoinGame(this._id, $("#playerName").val());
+    }
   }
 });
+
+function checkNameSupplied () {
+  if (!$("#playerName").val()) {
+    $("#playerNameLabel").stop().animate({color: "#ff0000"}, 0).animate({color: "#000000"}, 1500);
+    return false;
+  } else {
+    return true;
+  }
+}
 
 function game () {
   return Games.findOne(Session.get("gameId"));
@@ -60,20 +72,8 @@ Template.gameStatus.clock = function () {
   return min + ":" + (sec < 10 ? "0" : "") + sec;
 };
 
-Template.player._name = function () {
-  var player = Players.findOne(this + "");
-  if (!player) {
-    return "Invalid player";
-  }
-  return player._id;
-};
-
 Template.player.score = function () {
-  var player = Players.findOne(this + "");
-  if (!player) {
-    return "Invalid player";
-  }
-  return player.score + " point" + (player.score > 1 ? "s" : "");
+  return this.score + " point" + (this.score > 1 ? "s" : "");
 };
 
 Template.subject.text = function () {
@@ -117,7 +117,7 @@ function isPhase (phase) {
 }
 
 Template.picture.drawer = function () {
-  return this.drawerId;
+  return Players.findOne(this.drawerId);
 };
 
 function getImageInPaintArea () {
