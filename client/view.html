@@ -13,6 +13,8 @@
   {{ else }}
     {{> game }}
   {{/ if }}
+  
+  {{> chat }}
 </template>
 
 <template name="lobby">
@@ -143,5 +145,24 @@
     {{# each players }}
       {{> player }}
     {{/ each }}
+  </div>
+</template>
+
+<template name="chat">
+  <div>
+    Chat:
+  </div>
+  <div>
+    <input id="message" type="text" />
+    <button>Submit</button>
+  </div>
+  {{# each messages }}
+    {{> message }}
+  {{/ each }}
+</template>
+
+<template name="message">
+  <div>
+    {{ speaker }} : {{ text }}
   </div>
 </template>

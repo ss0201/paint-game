@@ -70,6 +70,13 @@ function Problem (text) {
   self.text = text;
 }
 
+function Message (speakerId, gameId, text) {
+  var self = this;
+  self.speakerId = speakerId;
+  self.gameId = gameId;
+  self.text = text;
+}
+
 var Games = new Meteor.Collection("games");
 var Players = new Meteor.Collection("players");
 var Subjects = new Meteor.Collection("subjects");
@@ -77,10 +84,12 @@ var Pictures = new Meteor.Collection("pictures");
 if (Meteor.isServer) {
   var Problems = new Meteor.Collection(null);
 }
+var Messages = new Meteor.Collection("messages");
 
 if (Meteor.isClient) {
   Deps.autorun(function () {
     Meteor.subscribe("games");
+    Meteor.subscribe("messages");
   });
 }
 
@@ -106,12 +115,16 @@ if (Meteor.isServer) {
     Meteor.publish("pictures", function (gameId) {
       return Pictures.find({gameId: gameId});
     });
+    Meteor.publish("messages", function () {
+      return Messages.find({});
+    });
 
     Games.remove({});
     Players.remove({});
     Subjects.remove({});
     Pictures.remove({});
     Problems.remove({});
+    Messages.remove({});
     
     Problems.insert(new Problem("a"));
     Problems.insert(new Problem("b"));

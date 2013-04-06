@@ -44,5 +44,16 @@ Meteor.methods({
       }
       return playerId
     }
+  },
+  
+  speak: function (speakerId, gameId, message) {
+    if (Meteor.isServer) {
+      Messages.insert(new Message(speakerId, gameId, message));
+      var messages = Messages.find({gameId: gameId});
+      if (messages.count() > 10) {
+        var oldest = _.first(messages.fetch());
+        Messages.remove(oldest._id);
+      }
+    }
   }
 });

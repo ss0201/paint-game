@@ -147,3 +147,22 @@ Template.picture.events({
 Template.players.players = function () {
   return Players.find({});
 };
+
+Template.chat.messages = function () {
+  return Messages.find({gameId: Session.get("gameId")}).fetch().reverse();
+};
+
+Template.message.speaker = function () {
+  return Meteor.users.findOne(this.speakerId).username;
+};
+
+Template.chat.events({
+  "click button, keydown input": function (event, template) {
+    if (event.type === "click" || (event.type === "keydown" && String.fromCharCode( event.which ) === "\r")) {
+      var textbox = template.find("#message");
+      Meteor.call("speak", Meteor.userId(), Session.get("gameId"), textbox.value);
+      textbox.value = "";
+      textbox.focus();
+    }
+  }
+});
