@@ -8,16 +8,14 @@ Template.page.notInGame = function () {
 
 Template.lobby.events({
   "click #newGame": function (event, template) {
-    if (checkNameSupplied()) {
-      Meteor.call("createGame", template.find("#gameName").value, function (error, result) {
-        var gameId = result;
-        if (error) {
-          console.log(error);
-        } else {
-          callJoinGame(gameId, $("#playerName").val());
-        }
-      });
-    }
+    Meteor.call("createGame", template.find("#gameName").value, function (error, result) {
+      var gameId = result;
+      if (error) {
+        console.log(error);
+      } else {
+        callJoinGame(gameId);
+      }
+    });
   }
 });
 
@@ -27,20 +25,9 @@ Template.lobby.games = function () {
 
 Template.gameInfo.events({
   "click #join": function (event, template) {
-    if (checkNameSupplied()) {
-      callJoinGame(this._id, $("#playerName").val());
-    }
+    callJoinGame(this._id);
   }
 });
-
-function checkNameSupplied () {
-  if (!$("#playerName").val()) {
-    $("#playerNameLabel").stop().animate({color: "#ff0000"}, 0).animate({color: "#000000"}, 1500);
-    return false;
-  } else {
-    return true;
-  }
-}
 
 function game () {
   return Games.findOne(Session.get("gameId"));
@@ -70,6 +57,10 @@ Template.gameStatus.clock = function () {
   var min = Math.floor(clock / 60);
   var sec = clock % 60;
   return min + ":" + (sec < 10 ? "0" : "") + sec;
+};
+
+Template.player._name = function () {
+  return Meteor.users.findOne(this.userId).username;
 };
 
 Template.player.score = function () {

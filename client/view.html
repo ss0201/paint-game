@@ -24,14 +24,6 @@
   {{# unless currentUser }}
     Please Sign in. (See right top corner.)
   {{/ unless }}
-  {{# if currentUser }}
-    <div style="margin:10px 0px">
-      <div>
-        <label id="playerNameLabel" for="playerName">Your Name:</label>
-      </div>
-      <input id="playerName" type="text" />
-    </div>
-  {{/ if }}
   <div style="margin:10px 0px">
     {{# each games }}
       {{> gameInfo }}
@@ -75,7 +67,7 @@
 
 <template name="player">
   <div>
-    {{ name }} : {{ score }}
+    {{ _name }} : {{ score }}
   </div>
 </template>
 

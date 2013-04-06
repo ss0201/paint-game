@@ -33,13 +33,13 @@ Meteor.methods({
     }
   },
   
-  joinGame: function (userId, gameId, playerName) {
+  joinGame: function (userId, gameId) {
     if (Meteor.isServer) {
       var playerId;
       if (Players.find({userId: userId}).count() == 0) {
-        playerId = Players.insert(new Player(userId, gameId, playerName));
+        playerId = Players.insert(new Player(userId, gameId));
       } else {
-        Players.update({userId: userId}, {$set: {gameId: gameId, name: playerName}});
+        Players.update({userId: userId}, {$set: {gameId: gameId}});
         playerId = Players.findOne({userId: userId})._id;
       }
       return playerId

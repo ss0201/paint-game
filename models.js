@@ -42,11 +42,10 @@ if (Meteor.isServer) {
   }
 }
 
-function Player (userId, gameId, name) {
+function Player (userId, gameId) {
   var self = this;
   self.userId = userId;
   self.gameId = gameId;
-  self.name = name;
   self.score = 0;
 }
 

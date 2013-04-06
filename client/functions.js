@@ -10,8 +10,8 @@ Meteor.startup(function () {
   Session.set("playerId", undefined);
 });
 
-function callJoinGame (gameId, playerName) {
-  Meteor.call("joinGame", Meteor.userId(), gameId, playerName, function (error, result) {
+function callJoinGame (gameId) {
+  Meteor.call("joinGame", Meteor.userId(), gameId, function (error, result) {
     if (error) {
       console.log(error);
     } else {
