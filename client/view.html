@@ -78,11 +78,15 @@
         You are drawing:
       </div>
       {{> subject drawerData }}
-      {{# constant }}
-        {{> paint }}
-      {{/ constant }}
     </div>
+    {{ showPaint }}
+  {{ else }}
+    {{ hidePaint }}
   {{/ if }}
+
+  {{# constant }}
+    {{> paint }}
+  {{/ constant }}
 </template>
 
 <template name="paint">

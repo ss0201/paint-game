@@ -1,6 +1,7 @@
 function onPhaseChanged (phase) {
   if (phaseEquals(phase, GUESSING_PHASE)) {
     var image = getImageInPaintArea();
+    clearPaintArea();
     Meteor.call("sendPicture", Session.get("playerId"), Session.get("gameId"), image);
   }
 }
