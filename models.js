@@ -87,6 +87,7 @@ var Messages = new Meteor.Collection("messages");
 
 if (Meteor.isClient) {
   Deps.autorun(function () {
+    Meteor.subscribe("userData");
     Meteor.subscribe("games");
     Meteor.subscribe("messages");
   });
@@ -94,6 +95,9 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
+    Meteor.publish("userData", function () {
+      return Meteor.users.find({});
+    });
     Meteor.publish("games", function () {
       return Games.find({});
     });

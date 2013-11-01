@@ -144,6 +144,8 @@ Template.chat.messages = function () {
 };
 
 Template.message.speaker = function () {
+  console.log(this.speakerId);
+  console.log(Meteor.users);
   return Meteor.users.findOne(this.speakerId).username;
 };
 
