@@ -86,13 +86,11 @@ Template.drawing.drawerData = function () {
 
 Template.drawing.showPaint = function() {
   $("#paint").show();
-  console.log("show");
   return;
 };
 
 Template.drawing.hidePaint = function() {
   $("#paint").hide();
-  console.log("hide");
   return;
 };
 
@@ -160,8 +158,6 @@ Template.chat.messages = function () {
 };
 
 Template.message.speaker = function () {
-  console.log(this.speakerId);
-  console.log(Meteor.users);
   return Meteor.users.findOne(this.speakerId).username;
 };
 
