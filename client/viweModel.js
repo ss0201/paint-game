@@ -8,14 +8,19 @@ Template.page.notInGame = function () {
 
 Template.lobby.events({
   "click #newGame": function (event, template) {
-    Meteor.call("createGame", template.find("#gameName").value, function (error, result) {
-      var gameId = result;
-      if (error) {
-        console.log(error);
-      } else {
-        callJoinGame(gameId);
-      }
-    });
+    var gameName = template.find("#gameName").value;
+    if (!gameName) {
+      alert("Please give a game name.");
+    } else {
+      Meteor.call("createGame", gameName, function (error, result) {
+        var gameId = result;
+        if (error) {
+          console.log(error);
+        } else {
+          callJoinGame(gameId);
+        }
+      });
+    }
   }
 });
 
