@@ -136,9 +136,9 @@ Template.picture.mine = function () {
   return (this.drawerId == Session.get("playerId"));
 };
 
-Template.guessForm.preserve(["button", "input"]);
+Template.picture.preserve(["#answerInput"]);
 
-Template.guessForm.events({
+Template.picture.events({
   "click button, keydown input": function (event, template) {
     if (event.type === "click" || (event.type === "keydown" && String.fromCharCode( event.which ) === "\r")) {
       var textbox = template.find("#answerInput");
