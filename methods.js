@@ -14,7 +14,7 @@ Meteor.methods({
   
   requireSubject: function (drawerId, gameId) {
     if (Meteor.isServer) {
-      var problem = getRandomProblem();
+      var problem = getRandomProblem(gameId);
       if (Subjects.find({drawerId: drawerId}).count() == 0) {
         Subjects.insert(new Subject(drawerId, gameId, problem.text));
       } else {
@@ -29,9 +29,9 @@ Meteor.methods({
     }
   },
   
-  createGame: function (name) {
+  createGame: function (name, problemSetId) {
     if (Meteor.isServer) {
-      return Games.insert(new Game(name));
+      return Games.insert(new Game(name, problemSetId));
     }
   },
   
@@ -56,6 +56,18 @@ Meteor.methods({
         var oldest = _.first(messages.fetch());
         Messages.remove(oldest._id);
       }
+    }
+  },
+  
+  createProblemSet: function (name) {
+    if (Meteor.isServer) {
+      ProblemSets.insert(new ProblemSet(name));
+    }
+  },
+  
+  addProblem: function (problemSetId, text) {
+    if (Meteor.isServer) {
+      Problems.insert(new Problem(problemSetId, text));
     }
   }
 });

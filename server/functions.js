@@ -28,7 +28,8 @@ Meteor.startup(function () {
   Meteor.setInterval(progress, 1*1000);
 });
 
-function getRandomProblem () {
-  var problems = Problems.find({});
+function getRandomProblem (gameId) {
+  var game = Games.find(gameId);
+  var problems = Problems.find({problemSetId: game.problemSetId});
   return Random.choice(problems.fetch());
 }

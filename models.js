@@ -23,11 +23,12 @@ if (Meteor.isServer) {
   }
 }
 
-function Game (name) {
+function Game (name, problemSetId) {
   var self = this;
   self.name = name;
   self.phase = DRAWING_PHASE;
   self.clock = self.phase.duration;
+  self.problemSetId = problemSetId;
 }
 
 if (Meteor.isServer) {
@@ -64,8 +65,14 @@ function Picture (drawerId, gameId, image) {
   self.image = image;
 }
 
-function Problem (text) {
+function ProblemSet (name) {
   var self = this;
+  self.name = name;
+}
+
+function Problem (problemSetId, text) {
+  var self = this;
+  self.problemSetId = problemSetId;
   self.text = text;
 }
 
@@ -80,6 +87,7 @@ var Games = new Meteor.Collection("games");
 var Players = new Meteor.Collection("players");
 var Subjects = new Meteor.Collection("subjects");
 var Pictures = new Meteor.Collection("pictures");
+var ProblemSets = new Meteor.Collection("problemSets");
 if (Meteor.isServer) {
   var Problems = new Meteor.Collection(null);
 }
@@ -89,6 +97,7 @@ if (Meteor.isClient) {
   Deps.autorun(function () {
     Meteor.subscribe("userData");
     Meteor.subscribe("games");
+    Meteor.subscribe("problemSets");
     Meteor.subscribe("messages");
   });
 }
@@ -118,6 +127,9 @@ if (Meteor.isServer) {
     Meteor.publish("pictures", function (gameId) {
       return Pictures.find({gameId: gameId});
     });
+    Meteor.publish("problemSets", function () {
+      return ProblemSets.find({});
+    });
     Meteor.publish("messages", function () {
       return Messages.find({});
     });
@@ -126,13 +138,6 @@ if (Meteor.isServer) {
     Players.remove({});
     Subjects.remove({});
     Pictures.remove({});
-    Problems.remove({});
     Messages.remove({});
-    
-    Problems.insert(new Problem("a"));
-    Problems.insert(new Problem("b"));
-    Problems.insert(new Problem("c"));
-    Problems.insert(new Problem("d"));
-    Problems.insert(new Problem("e"));
   });
 }

@@ -9,10 +9,11 @@ Template.page.notInGame = function () {
 Template.lobby.events({
   "click #newGame": function (event, template) {
     var gameName = template.find("#gameName").value;
+    var problemSetId = 
     if (!gameName) {
       alert("Please give a game name.");
     } else {
-      Meteor.call("createGame", gameName, function (error, result) {
+      Meteor.call("createGame", gameName, problemSetId, function (error, result) {
         var gameId = result;
         if (error) {
           console.log(error);
@@ -26,6 +27,10 @@ Template.lobby.events({
 
 Template.lobby.games = function () {
   return Games.find({});
+};
+
+Template.lobby.problemSets = function () {
+  return ProblemSets.find({});
 };
 
 Template.gameInfo.events({
