@@ -3,9 +3,11 @@ Meteor.methods({
     if (Meteor.isServer) {
       var subject = Subjects.findOne({drawerId: drawerId});
       var answerer = Players.findOne(answererId);
+      var drawer = Players.findOne(drawerId);
       if (subject.text == text) {
         Subjects.update(subject._id, {$set: {answered: true}});
         Players.update(answerer._id, {$set: {score: answerer.score + 1}});
+        Players.update(drawer._id, {$set: {score: drawer.score + 1}});
       }
     }
   },
