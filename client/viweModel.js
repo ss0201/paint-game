@@ -84,16 +84,6 @@ Template.drawing.drawerData = function () {
   return Session.get("playerId");
 };
 
-Template.drawing.showPaint = function() {
-  $("#paint").show();
-  return;
-};
-
-Template.drawing.hidePaint = function() {
-  $("#paint").hide();
-  return;
-};
-
 Template.paint.created = function () {
   $("#paint").wPaint({
     strokeStyle: "#000000",
@@ -127,6 +117,14 @@ function getImageInPaintArea () {
 
 function clearPaintArea () {
   $('#paint').wPaint('clear');
+}
+
+function showPaintArea () {
+  $("#paint").show();
+}
+
+function hidePaintArea () {
+  $("#paint").hide();
 }
 
 Template.picture.answered = function () {
