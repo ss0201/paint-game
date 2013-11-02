@@ -122,12 +122,16 @@
     {{# if mine }}
       {{> subject drawerId }}
     {{ else }}
-      <div>
-        <input id="answerInput" type="text" />
-        <button>Guess!</button>
-      </div>
+      {{> guessForm }}
     {{/ if }}
   {{/ if }}
+</template>
+
+<template name="guessForm">
+    <div>
+      <input id="answerInput" type="text" />
+      <button>Guess!</button>
+    </div>
 </template>
 
 <template name="players">
