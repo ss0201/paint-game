@@ -55,15 +55,17 @@ function createGame (gameName, problemSetId) {
 
 function uploadProblems (files) {
   _.each(files, function (file) {
-    if (!file.type.match('text')) {
+    if (!file.type.match("text")) {
       return true;
     }
 
     var reader = new FileReader();
     reader.onload = function (e) {
       var problemSetName = file.name;
-      var problems = e.target.result.split(/\r?\n/);
-      Meteor.call("createProblemSet", problemSetName, problems);
+      if (ProblemSets.find({name: problemSetName}).count() == 0) {
+        var problems = e.target.result.split(/\r?\n/);
+        Meteor.call("createProblemSet", problemSetName, problems);
+      }
     };
     reader.readAsText(file);
   });
