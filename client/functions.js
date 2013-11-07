@@ -61,7 +61,7 @@ function uploadProblems (files) {
 
     var reader = new FileReader();
     reader.onload = function (e) {
-      var problemSetName = file.name;
+      var problemSetName = file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
       if (ProblemSets.find({name: problemSetName}).count() == 0) {
         var problems = e.target.result.split(/\r?\n/);
         Meteor.call("createProblemSet", problemSetName, problems);
