@@ -87,6 +87,14 @@ Template.subject.text = function () {
   return text;
 };
 
+Template.drawing.rendered = function () {
+  if (Template.drawing.show()) {
+    $("#paint").show();
+  } else {
+    $("#paint").hide();
+  }
+};
+
 Template.drawing.show = function() {
   return isPhase(DRAWING_PHASE);
 };
@@ -95,7 +103,7 @@ Template.drawing.drawerData = function () {
   return Session.get("playerId");
 };
 
-Template.paint.created = function () {
+Template.paint.rendered = function () {
   $("#paint").wPaint({
     strokeStyle: "#000000",
     lineWidthMin: 1,
@@ -128,14 +136,6 @@ function getImageInPaintArea () {
 
 function clearPaintArea () {
   $('#paint').wPaint('clear');
-}
-
-function showPaintArea () {
-  $("#paint").show();
-}
-
-function hidePaintArea () {
-  $("#paint").hide();
 }
 
 Template.picture.answered = function () {
