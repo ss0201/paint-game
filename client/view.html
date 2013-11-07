@@ -24,7 +24,7 @@
   {{# unless currentUser }}
     Please Sign in. (See right top corner.)
   {{/ unless }}
-  <div style="margin:10px 0px">
+  <div class="block">
     {{# each games }}
       {{> gameInfo }}
     {{/ each }}
@@ -45,29 +45,35 @@
 </template>
 
 <template name="newGame">
-  <div style="margin:10px 0px">
+  <div class="block">
     <div>
       <label for="gameName">Game Name:</label>
+      <input id="gameName" type="text" />
     </div>
-    <input id="gameName" type="text" />
+    
     <div>
       <label for="problemSet">Problem Set:</label>
+      <select id="problemSet">
+        {{# each problemSets }}
+          <option>{{ name }}</option>
+        {{/ each }}
+      </select>
     </div>
-    <select id="problemSet">
-      {{# each problemSets }}
-        <option>{{ name }}</option>
-      {{/ each }}
-    </select>
-    <button id="newGame">New Game</button>
+    
+    <div>
+      <button id="newGame">New Game</button>
+    </div>
   </div>
 </template>
 
 <template name="problemUploader">
-  <div>
+  <div class="block">
     <div>
-      <label for="selector">Upload problems:</label>
+      Upload problems:
     </div>
-    <input type="file" id="selector" multiple />
+    <div>
+      <input type="file" id="selector" multiple />
+    </div>
   </div>
 </template>
 
@@ -114,7 +120,7 @@
 
 <template name="guessing">
   {{# if show }}
-    <div style="margin:10px 0px">
+    <div class="block">
       {{# each pictures }}
         <div style="float:left; margin:0px 10px">
           {{> picture }}
@@ -153,7 +159,7 @@
 </template>
 
 <template name="players">
-  <div style="margin:10px 0px">
+  <div class="block">
     <div>
       Players:
     </div>
@@ -164,16 +170,18 @@
 </template>
 
 <template name="chat">
-  <div>
-    Chat:
+  <div class="block">
+    <div>
+      Chat:
+    </div>
+    <div>
+      <input id="message" type="text" />
+      <button>Submit</button>
+    </div>
+    {{# each messages }}
+      {{> message }}
+    {{/ each }}
   </div>
-  <div>
-    <input id="message" type="text" />
-    <button>Submit</button>
-  </div>
-  {{# each messages }}
-    {{> message }}
-  {{/ each }}
 </template>
 
 <template name="message">
