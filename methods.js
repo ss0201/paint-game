@@ -63,7 +63,9 @@ Meteor.methods({
     if (Meteor.isServer) {
       var problemSetId = ProblemSets.insert(new ProblemSet(name));
       _.each(problemTexts, function (text) {
-        Problems.insert(new Problem(problemSetId, text));
+        if (text) {
+          Problems.insert(new Problem(problemSetId, text));
+        }
       });
     }
   }
