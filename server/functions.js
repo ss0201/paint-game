@@ -9,7 +9,7 @@ function progress () {
         var players = Players.find({gameId: game._id});
         var presentPlayerIds = new Array();
         players.forEach(function (player) {
-          Meteor.call("requireSubject", player._id, game._id);
+          Meteor.call("requestSubject", player._id, game._id);
           presentPlayerIds.push(player._id);
         });
         Subjects.remove(

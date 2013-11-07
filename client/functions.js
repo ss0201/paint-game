@@ -28,7 +28,7 @@ function joinGame (gameId) {
 function onJoinedGame (playerId, gameId) {
   Session.set("gameId", gameId);
   Session.set("playerId", playerId);
-  Meteor.call("requireSubject", playerId, gameId);
+  Meteor.call("requestSubject", playerId, gameId);
   var game = Games.find(gameId);
   game.observeChanges({
     changed: function (id, fields) {

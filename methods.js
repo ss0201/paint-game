@@ -12,7 +12,7 @@ Meteor.methods({
     }
   },
   
-  requireSubject: function (drawerId, gameId) {
+  requestSubject: function (drawerId, gameId) {
     if (Meteor.isServer) {
       var problem = getRandomProblem(gameId);
       if (Subjects.find({drawerId: drawerId}).count() == 0) {
