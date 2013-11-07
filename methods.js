@@ -40,6 +40,7 @@ Meteor.methods({
       var playerId;
       if (Players.find({userId: userId}).count() == 0) {
         playerId = Players.insert(new Player(userId, gameId));
+        Meteor.call("requestSubject", playerId, gameId);
       } else {
         Players.update({userId: userId}, {$set: {gameId: gameId}});
         playerId = Players.findOne({userId: userId})._id;
