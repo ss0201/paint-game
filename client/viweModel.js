@@ -6,36 +6,37 @@ Template.page.notInGame = function () {
   return (!Session.get("gameId"));
 };
 
-Template.lobby.events({
-  "click #newGame": function (event, template) {
-    var gameName = template.find("#gameName").value;
-    var problemSetId = 
-    if (!gameName) {
-      alert("Please give a game name.");
-    } else {
-      Meteor.call("createGame", gameName, problemSetId, function (error, result) {
-        var gameId = result;
-        if (error) {
-          console.log(error);
-        } else {
-          callJoinGame(gameId);
-        }
-      });
-    }
-  }
-});
-
 Template.lobby.games = function () {
   return Games.find({});
 };
 
-Template.lobby.problemSets = function () {
+Template.newGame.events({
+  "click #newGame": function (event, template) {
+    var gameName = template.find("#gameName").value;
+    var problemSetName = template.find("#problemSet").value;
+    var problemSetId = ProblemSets.findOne({name: problemSetName})._id;
+    if (!gameName) {
+      alert("Please give a game name.");
+    } else {
+      callCreateGame(gameName, problemSetId);
+    }
+  }
+});
+
+Template.newGame.problemSets = function () {
   return ProblemSets.find({});
 };
 
 Template.gameInfo.events({
   "click #join": function (event, template) {
     callJoinGame(this._id);
+  }
+});
+
+Template.problemUploader.events({
+  "change #selector": function (event) {
+    var files = event.target.files;
+    uploadProblems(files);
   }
 });
 

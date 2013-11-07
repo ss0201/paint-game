@@ -30,21 +30,8 @@
     {{/ each }}
   </div>
   {{# if currentUser }}
-    <div style="margin:10px 0px">
-      <div>
-        <label for="gameName">Game Name:</label>
-      </div>
-      <input id="gameName" type="text" />
-      <div>
-        <label for="problemSet">Problem Set:</label>
-      </div>
-      <select>
-        {{# each problemSets }}
-          <option value="{{ name }}" />
-        {{/ each }}
-      </select>
-      <button id="newGame">New Game</button>
-    </div>
+    {{> newGame }}
+    {{> problemUploader }}
   {{/ if }}
 </template>
 
@@ -54,6 +41,33 @@
       <button id="join">Join</button>
     {{/ if }}
     {{ name }}
+  </div>
+</template>
+
+<template name="newGame">
+  <div style="margin:10px 0px">
+    <div>
+      <label for="gameName">Game Name:</label>
+    </div>
+    <input id="gameName" type="text" />
+    <div>
+      <label for="problemSet">Problem Set:</label>
+    </div>
+    <select id="problemSet">
+      {{# each problemSets }}
+        <option>{{ name }}</option>
+      {{/ each }}
+    </select>
+    <button id="newGame">New Game</button>
+  </div>
+</template>
+
+<template name="problemUploader">
+  <div>
+    <div>
+      <label for="selector">Upload problems:</label>
+    </div>
+    <input type="file" id="selector" multiple />
   </div>
 </template>
 

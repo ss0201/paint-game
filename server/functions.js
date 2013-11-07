@@ -29,7 +29,7 @@ Meteor.startup(function () {
 });
 
 function getRandomProblem (gameId) {
-  var game = Games.find(gameId);
+  var game = Games.findOne(gameId);
   var problems = Problems.find({problemSetId: game.problemSetId});
   return Random.choice(problems.fetch());
 }

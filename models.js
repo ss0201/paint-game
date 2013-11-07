@@ -89,7 +89,7 @@ var Subjects = new Meteor.Collection("subjects");
 var Pictures = new Meteor.Collection("pictures");
 var ProblemSets = new Meteor.Collection("problemSets");
 if (Meteor.isServer) {
-  var Problems = new Meteor.Collection(null);
+  var Problems = new Meteor.Collection("problems");
 }
 var Messages = new Meteor.Collection("messages");
 

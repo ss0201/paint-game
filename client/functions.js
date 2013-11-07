@@ -41,3 +41,30 @@ function onJoinedGame (playerId, gameId) {
   Meteor.subscribe("subjects", gameId, playerId);
   Meteor.subscribe("pictures", gameId);
 }
+
+function callCreateGame (gameName, problemSetId) {
+  Meteor.call("createGame", gameName, problemSetId, function (error, result) {
+    var gameId = result;
+    if (error) {
+      console.log(error);
+    } else {
+      callJoinGame(gameId);
+    }
+  });
+}
+
+function uploadProblems (files) {
+  $.each(files, function (i, file) {
+    if (!file.type.match('text')) {
+      return true;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var problemSetName = file.name;
+      var problems = e.target.result.split(/\r?\n/);
+      Meteor.call("createProblemSet", problemSetName, problems);
+    };
+    reader.readAsText(file);
+  });
+}

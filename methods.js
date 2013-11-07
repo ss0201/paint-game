@@ -59,15 +59,12 @@ Meteor.methods({
     }
   },
   
-  createProblemSet: function (name) {
+  createProblemSet: function (name, problemTexts) {
     if (Meteor.isServer) {
-      ProblemSets.insert(new ProblemSet(name));
-    }
-  },
-  
-  addProblem: function (problemSetId, text) {
-    if (Meteor.isServer) {
-      Problems.insert(new Problem(problemSetId, text));
+      var problemSetId = ProblemSets.insert(new ProblemSet(name));
+      _.each(problemTexts, function (text) {
+        Problems.insert(new Problem(problemSetId, text));
+      });
     }
   }
 });
