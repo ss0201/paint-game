@@ -54,7 +54,7 @@ function callCreateGame (gameName, problemSetId) {
 }
 
 function uploadProblems (files) {
-  $.each(files, function (i, file) {
+  _.each(files, function (file) {
     if (!file.type.match('text')) {
       return true;
     }
