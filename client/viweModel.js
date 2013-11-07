@@ -18,7 +18,7 @@ Template.newGame.events({
     } else {
       var problemSetName = template.find("#problemSet").value;
       var problemSetId = ProblemSets.findOne({name: problemSetName})._id;
-      callCreateGame(gameName, problemSetId);
+      createGame(gameName, problemSetId);
     }
   }
 });
@@ -29,7 +29,7 @@ Template.newGame.problemSets = function () {
 
 Template.gameInfo.events({
   "click #join": function (event, template) {
-    callJoinGame(this._id);
+    joinGame(this._id);
   }
 });
 

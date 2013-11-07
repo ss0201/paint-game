@@ -14,7 +14,7 @@ Meteor.startup(function () {
   Session.set("playerId", undefined);
 });
 
-function callJoinGame (gameId) {
+function joinGame (gameId) {
   Meteor.call("joinGame", Meteor.userId(), gameId, function (error, result) {
     if (error) {
       console.log(error);
@@ -42,13 +42,13 @@ function onJoinedGame (playerId, gameId) {
   Meteor.subscribe("pictures", gameId);
 }
 
-function callCreateGame (gameName, problemSetId) {
+function createGame (gameName, problemSetId) {
   Meteor.call("createGame", gameName, problemSetId, function (error, result) {
     var gameId = result;
     if (error) {
       console.log(error);
     } else {
-      callJoinGame(gameId);
+      joinGame(gameId);
     }
   });
 }
