@@ -2,6 +2,29 @@ Accounts.ui.config({
   passwordSignupFields: "USERNAME_ONLY"
 });
 
+Template.page.created = function () {
+  $.ionSound({
+    sounds: [
+      "NewRound",
+      "LetsGuess",
+      "CheckAnswers",
+      "Correct",
+      "Wrong"
+    ],
+    path: "sounds/"
+  });
+}
+
+function playSound (phase) {
+  if (isPhase(game().drawingPhase)) {
+    $.ionSound.play("NewRound");
+  } else if (isPhase(game().guessingPhase)) {
+    $.ionSound.play("LetsGuess");
+  } else if (isPhase(game().answerPhase)) {
+    $.ionSound.play("CheckAnswers");
+  }
+}
+
 Template.page.notInGame = function () {
   return (!Session.get("gameId"));
 };
@@ -159,7 +182,17 @@ Template.picture.events({
   "click button, keydown input": function (event, template) {
     if (event.type === "click" || (event.type === "keydown" && String.fromCharCode( event.which ) === "\r")) {
       var textbox = template.find("#answerInput");
-      Meteor.call("answer", Session.get("playerId"), this.drawerId, textbox.value);
+      Meteor.call("answer", Session.get("playerId"), this.drawerId, textbox.value, function (error, correct) {
+        if (error) {
+          console.log(error);
+        } else {
+          if (correct) {
+            $.ionSound.play("Correct");
+          } else {
+            $.ionSound.play("Wrong");
+          }
+        }
+      });
       textbox.value = "";
       textbox.focus();
     }

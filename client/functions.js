@@ -6,6 +6,7 @@ function onPhaseChanged (phase) {
     Meteor.call("sendPicture", Session.get("playerId"), gameId, image);
     clearPaintArea();
   }
+  playSound();
 }
 
 Meteor.startup(function () {
@@ -38,6 +39,7 @@ function onJoinedGame (playerId, gameId) {
   Meteor.subscribe("players", gameId);
   Meteor.subscribe("subjects", gameId, playerId);
   Meteor.subscribe("pictures", gameId);
+  playSound();
 }
 
 function createGame (gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration) {

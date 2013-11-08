@@ -8,6 +8,9 @@ Meteor.methods({
         Subjects.update(subject._id, {$set: {answered: true}});
         Players.update(answerer._id, {$set: {score: answerer.score + 1}});
         Players.update(drawer._id, {$set: {score: drawer.score + 1}});
+        return true;
+      } else {
+        return false;
       }
     }
   },
