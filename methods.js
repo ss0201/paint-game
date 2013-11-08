@@ -29,9 +29,9 @@ Meteor.methods({
     }
   },
   
-  createGame: function (name, problemSetId) {
+  createGame: function (name, problemSetId, drawingPhaseDuration, guessingPhaseDuration) {
     if (Meteor.isServer) {
-      return Games.insert(new Game(name, problemSetId));
+      return Games.insert(new Game(name, problemSetId, drawingPhaseDuration, guessingPhaseDuration));
     }
   },
   

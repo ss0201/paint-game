@@ -1,7 +1,9 @@
 function onPhaseChanged (phase) {
-  if (phaseEquals(phase, GUESSING_PHASE)) {
+  var gameId = Session.get("gameId");
+  var game = Games.findOne(gameId);
+  if (arePhasesEqual(phase, game.guessingPhase)) {
     var image = getImageInPaintArea();
-    Meteor.call("sendPicture", Session.get("playerId"), Session.get("gameId"), image);
+    Meteor.call("sendPicture", Session.get("playerId"), gameId, image);
     clearPaintArea();
   }
 }
@@ -38,8 +40,8 @@ function onJoinedGame (playerId, gameId) {
   Meteor.subscribe("pictures", gameId);
 }
 
-function createGame (gameName, problemSetId) {
-  Meteor.call("createGame", gameName, problemSetId, function (error, result) {
+function createGame (gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration) {
+  Meteor.call("createGame", gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration, function (error, result) {
     var gameId = result;
     if (error) {
       console.log(error);

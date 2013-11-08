@@ -5,7 +5,7 @@ function progress () {
     if (isTimeOver(game)) {
       var phase = game.phase;
       changePhase(game);
-      if (phaseEquals(phase, GUESSING_PHASE)) {
+      if (arePhasesEqual(phase, game.guessingPhase)) {
         var players = Players.find({gameId: game._id});
         var presentPlayerIds = new Array();
         players.forEach(function (player) {

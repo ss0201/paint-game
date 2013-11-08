@@ -18,7 +18,9 @@ Template.newGame.events({
     } else {
       var problemSetName = template.find("#problemSet").value;
       var problemSetId = ProblemSets.findOne({name: problemSetName})._id;
-      createGame(gameName, problemSetId);
+      var drawingPhaseDuration = parseInt(template.find("#drawingPhaseDuration").value) || 0;
+      var guessingPhaseDuration = parseInt(template.find("#guessingPhaseDuration").value) || 0;
+      createGame(gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration);
     }
   }
 });
@@ -96,7 +98,7 @@ Template.drawing.rendered = function () {
 };
 
 Template.drawing.show = function() {
-  return isPhase(DRAWING_PHASE);
+  return isPhase(game().drawingPhase);
 };
 
 Template.drawing.drawerData = function () {
@@ -114,7 +116,7 @@ Template.paint.rendered = function () {
 };
 
 Template.guessing.show = function() {
-  return isPhase(GUESSING_PHASE);
+  return isPhase(game().guessingPhase);
 };
 
 Template.guessing.pictures = function () {
@@ -123,7 +125,7 @@ Template.guessing.pictures = function () {
 
 function isPhase (phase) {
   var currentPhase = game() && game().phase;
-  return (currentPhase && phaseEquals(currentPhase, phase));
+  return (currentPhase && arePhasesEqual(currentPhase, phase));
 }
 
 Template.picture.drawer = function () {
