@@ -215,8 +215,11 @@ Template.chat.events({
   "click button, keydown input": function (event, template) {
     if (event.type === "click" || (event.type === "keydown" && String.fromCharCode( event.which ) === "\r")) {
       var textbox = template.find("#message");
-      Meteor.call("speak", Meteor.userId(), Session.get("gameId"), textbox.value);
-      textbox.value = "";
+      var message = textbox.value;
+      if (message) {
+        Meteor.call("speak", Meteor.userId(), Session.get("gameId"), message);
+        textbox.value = "";
+      }
       textbox.focus();
     }
   }
