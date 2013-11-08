@@ -1,9 +1,9 @@
-function Game (name, problemSetId, drawingPhaseDuration, guessingPhaseDuration) {
+function Game (name, problemSetId, drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration) {
   var self = this;
   self.name = name;
   self.drawingPhase = new Phase("Drawing", drawingPhaseDuration);
   self.guessingPhase = new Phase("Guessing", guessingPhaseDuration);
-  self.answerPhase = new Phase("Answer", 10);
+  self.answerPhase = new Phase("Answer", answerPhaseDuration);
   self.phase = self.drawingPhase;
   self.clock = self.phase.duration;
   self.problemSetId = problemSetId;

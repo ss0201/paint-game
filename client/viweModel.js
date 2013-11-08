@@ -43,7 +43,8 @@ Template.newGame.events({
       var problemSetId = ProblemSets.findOne({name: problemSetName})._id;
       var drawingPhaseDuration = parseInt(template.find("#drawingPhaseDuration").value) || 0;
       var guessingPhaseDuration = parseInt(template.find("#guessingPhaseDuration").value) || 0;
-      createGame(gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration);
+      var answerPhaseDuration = parseInt(template.find("#answerPhaseDuration").value) || 0;
+      createGame(gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration);
     }
   }
 });
