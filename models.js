@@ -3,6 +3,7 @@ function Game (name, problemSetId, drawingPhaseDuration, guessingPhaseDuration) 
   self.name = name;
   self.drawingPhase = new Phase("Drawing", drawingPhaseDuration);
   self.guessingPhase = new Phase("Guessing", guessingPhaseDuration);
+  self.answerPhase = new Phase("Answer", 5);
   self.phase = self.drawingPhase;
   self.clock = self.phase.duration;
   self.problemSetId = problemSetId;
@@ -36,6 +37,8 @@ if (Meteor.isServer) {
     if (arePhasesEqual(game.phase, game.drawingPhase)) {
       nextPhase = game.guessingPhase;
     } else if (arePhasesEqual(game.phase, game.guessingPhase)) {
+      nextPhase = game.answerPhase;
+    } else if (arePhasesEqual(game.phase, game.answerPhase)) {
       nextPhase = game.drawingPhase;
     } else {
       console.log("No suitable next phase: Current phase = " + game.phase.name);

@@ -116,7 +116,7 @@ Template.paint.rendered = function () {
 };
 
 Template.guessing.show = function() {
-  return isPhase(game().guessingPhase);
+  return isPhase(game().guessingPhase) || isPhase(game().answerPhase);
 };
 
 Template.guessing.pictures = function () {
@@ -140,9 +140,13 @@ function clearPaintArea () {
   $('#paint').wPaint('clear');
 }
 
-Template.picture.answered = function () {
-  var subject = Subjects.findOne({drawerId: this.drawerId});
-  return (subject && subject.answered);
+Template.picture.revealed = function () {
+  if (isPhase(game().answerPhase)) {
+    return true;
+  } else {
+    var subject = Subjects.findOne({drawerId: this.drawerId});
+    return (subject && subject.answered);
+  }
 };
 
 Template.picture.mine = function () {
