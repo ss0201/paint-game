@@ -205,7 +205,11 @@ Template.players.players = function () {
 };
 
 Template.answer.answerer = function () {
-  var userId = Players.findOne(this.answererId).userId;
+  var user = Players.findOne(this.answererId);
+  if (!user) {
+    return "Answer";
+  }
+  var userId = user.userId;
   return Meteor.users.findOne(userId).username;
 };
 
