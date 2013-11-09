@@ -1,10 +1,8 @@
-function Game (name, problemSetId, drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration) {
+function Game (name, problemSetId, phaseSet) {
   var self = this;
   self.name = name;
-  self.drawingPhase = new Phase("Drawing", drawingPhaseDuration);
-  self.guessingPhase = new Phase("Guessing", guessingPhaseDuration);
-  self.answerPhase = new Phase("Answer", answerPhaseDuration);
-  self.phase = self.drawingPhase;
+  self.phaseSet = phaseSet;
+  self.phase = self.phaseSet.drawingPhase;
   self.clock = self.phase.duration;
   self.problemSetId = problemSetId;
 }
@@ -27,6 +25,13 @@ function Phase (name, duration) {
   self.duration = duration;
 }
 
+function PhaseSet (drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration) {
+  var self = this;
+  self.drawingPhase = new Phase("Drawing", drawingPhaseDuration);
+  self.guessingPhase = new Phase("Guessing", guessingPhaseDuration);
+  self.answerPhase = new Phase("Answer", answerPhaseDuration);
+}
+
 function arePhasesEqual (left, right) {
   return left.name == right.name;
 }
@@ -34,12 +39,12 @@ function arePhasesEqual (left, right) {
 if (Meteor.isServer) {
   function changePhase (game) {
     var nextPhase = null;
-    if (arePhasesEqual(game.phase, game.drawingPhase)) {
-      nextPhase = game.guessingPhase;
-    } else if (arePhasesEqual(game.phase, game.guessingPhase)) {
-      nextPhase = game.answerPhase;
-    } else if (arePhasesEqual(game.phase, game.answerPhase)) {
-      nextPhase = game.drawingPhase;
+    if (arePhasesEqual(game.phase, game.phaseSet.drawingPhase)) {
+      nextPhase = game.phaseSet.guessingPhase;
+    } else if (arePhasesEqual(game.phase, game.phaseSet.guessingPhase)) {
+      nextPhase = game.phaseSet.answerPhase;
+    } else if (arePhasesEqual(game.phase, game.phaseSet.answerPhase)) {
+      nextPhase = game.phaseSet.drawingPhase;
     } else {
       console.log("No suitable next phase: Current phase = " + game.phase.name);
     }

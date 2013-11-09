@@ -5,9 +5,9 @@ function progress () {
     if (isTimeOver(game)) {
       var originalPhase = game.phase;
       changePhase(game);
-      if (arePhasesEqual(originalPhase, game.answerPhase)) {
+      if (arePhasesEqual(originalPhase, game.phaseSet.answerPhase)) {
         beginNewRound(game);
-      } else if (arePhasesEqual(originalPhase, game.guessingPhase)) {
+      } else if (arePhasesEqual(originalPhase, game.phaseSet.guessingPhase)) {
         revealAnswers(game);
       }
     }

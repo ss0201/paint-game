@@ -1,7 +1,7 @@
 function onPhaseChanged (phase) {
   var gameId = Session.get("gameId");
   var game = Games.findOne(gameId);
-  if (arePhasesEqual(phase, game.guessingPhase)) {
+  if (arePhasesEqual(phase, game.phaseSet.guessingPhase)) {
     var image = getImageInPaintArea();
     Meteor.call("sendPicture", Session.get("playerId"), gameId, image);
     clearPaintArea();
@@ -43,8 +43,8 @@ function onJoinedGame (playerId, gameId) {
   playSound();
 }
 
-function createGame (gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration) {
-  Meteor.call("createGame", gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration, function (error, result) {
+function createGame (gameName, problemSetId, phaseSet) {
+  Meteor.call("createGame", gameName, problemSetId, phaseSet, function (error, result) {
     var gameId = result;
     if (error) {
       console.log(error);

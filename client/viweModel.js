@@ -16,11 +16,11 @@ Template.page.created = function () {
 }
 
 function playSound (phase) {
-  if (isPhase(game().drawingPhase)) {
+  if (isPhase(game().phaseSet.drawingPhase)) {
     $.ionSound.play("NewRound");
-  } else if (isPhase(game().guessingPhase)) {
+  } else if (isPhase(game().phaseSet.guessingPhase)) {
     $.ionSound.play("LetsGuess");
-  } else if (isPhase(game().answerPhase)) {
+  } else if (isPhase(game().phaseSet.answerPhase)) {
     $.ionSound.play("CheckAnswers");
   }
 }
@@ -44,7 +44,8 @@ Template.newGame.events({
       var drawingPhaseDuration = parseInt(template.find("#drawingPhaseDuration").value) || 0;
       var guessingPhaseDuration = parseInt(template.find("#guessingPhaseDuration").value) || 0;
       var answerPhaseDuration = parseInt(template.find("#answerPhaseDuration").value) || 0;
-      createGame(gameName, problemSetId, drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration);
+      var phaseSet = new PhaseSet(drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration);
+      createGame(gameName, problemSetId, phaseSet);
     }
   }
 });
@@ -122,7 +123,7 @@ Template.drawing.rendered = function () {
 };
 
 Template.drawing.show = function() {
-  return game() && isPhase(game().drawingPhase);
+  return game() && isPhase(game().phaseSet.drawingPhase);
 };
 
 Template.drawing.drawerData = function () {
@@ -140,7 +141,7 @@ Template.paint.rendered = function () {
 };
 
 Template.guessing.show = function() {
-  return game() && (isPhase(game().guessingPhase) || isPhase(game().answerPhase));
+  return game() && (isPhase(game().phaseSet.guessingPhase) || isPhase(game().phaseSet.answerPhase));
 };
 
 Template.guessing.pictures = function () {
