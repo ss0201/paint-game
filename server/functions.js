@@ -28,12 +28,20 @@ function beginNewRound (game) {
     ]}
   );
   Pictures.remove({gameId: game._id});
+  Answers.remove({gameId: game._id});
 }
 
 function revealAnswers(game) {
-  var subjects = Subjects.find({gameId: game._id});
-  subjects.forEach(function (subject) {
-    Subjects.update(subject._id, {$set: {answered: true}});
+  var correctAnswers = Answers.find({gameId: game._id, correct: true});
+  var correctlyAnsweredSubjectIds = correctAnswers.map(function () {
+    return this.subjectId;
+  });
+  var notCorrectlyAnsweredSubjects = Subjects.find({
+    gameId: game._id,
+    _id: {$not: {$in: correctlyAnsweredSubjectIds}}
+  });
+  notCorrectlyAnsweredSubjects.forEach(function (subject) {
+    Answers.insert(new Answer(undefined, subject.drawerId, game._id, subject.text, true));
   });
 }
 

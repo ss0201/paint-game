@@ -122,7 +122,7 @@ Template.drawing.rendered = function () {
 };
 
 Template.drawing.show = function() {
-  return isPhase(game().drawingPhase);
+  return game() && isPhase(game().drawingPhase);
 };
 
 Template.drawing.drawerData = function () {
@@ -140,7 +140,7 @@ Template.paint.rendered = function () {
 };
 
 Template.guessing.show = function() {
-  return isPhase(game().guessingPhase) || isPhase(game().answerPhase);
+  return game() && (isPhase(game().guessingPhase) || isPhase(game().answerPhase));
 };
 
 Template.guessing.pictures = function () {
@@ -164,13 +164,8 @@ function clearPaintArea () {
   $('#paint').wPaint('clear');
 }
 
-Template.picture.revealed = function () {
-  if (isPhase(game().answerPhase)) {
-    return true;
-  } else {
-    var subject = Subjects.findOne({drawerId: this.drawerId});
-    return (subject && subject.answered);
-  }
+Template.picture.answered = function () {
+  return Answers.find({drawerId: this.drawerId, correct: true}).count() > 0;
 };
 
 Template.picture.mine = function () {
@@ -200,8 +195,17 @@ Template.picture.events({
   }
 });
 
+Template.picture.answers = function () {
+  return Answers.find({gameId: game()._id, drawerId: this.drawerId}).fetch().reverse().slice(0, 5);
+};
+
 Template.players.players = function () {
   return Players.find({});
+};
+
+Template.answer.answerer = function () {
+  var userId = Players.findOne(this.answererId).userId;
+  return Meteor.users.findOne(userId).username;
 };
 
 Template.chat.messages = function () {

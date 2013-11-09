@@ -39,6 +39,7 @@ function onJoinedGame (playerId, gameId) {
   Meteor.subscribe("players", gameId);
   Meteor.subscribe("subjects", gameId, playerId);
   Meteor.subscribe("pictures", gameId);
+  Meteor.subscribe("answers", gameId);
   playSound();
 }
 

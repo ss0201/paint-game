@@ -4,8 +4,9 @@ Meteor.methods({
       var subject = Subjects.findOne({drawerId: drawerId});
       var answerer = Players.findOne(answererId);
       var drawer = Players.findOne(drawerId);
-      if (subject.text == text) {
-        Subjects.update(subject._id, {$set: {answered: true}});
+      var answer = new Answer(answerer._id, drawer._id, subject.gameId, text, subject.text == text);
+      Answers.insert(answer);
+      if (answer.correct) {
         Players.update(answerer._id, {$set: {score: answerer.score + 1}});
         Players.update(drawer._id, {$set: {score: drawer.score + 1}});
         return true;
@@ -21,7 +22,7 @@ Meteor.methods({
       if (Subjects.find({drawerId: drawerId}).count() == 0) {
         Subjects.insert(new Subject(drawerId, gameId, problem.text));
       } else {
-        Subjects.update({drawerId: drawerId}, {$set: {text: problem.text, answered: false}});
+        Subjects.update({drawerId: drawerId}, {$set: {text: problem.text}});
       }
     }
   },

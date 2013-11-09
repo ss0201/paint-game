@@ -59,7 +59,6 @@ function Subject (drawerId, gameId, text) {
   self.drawerId = drawerId;
   self.gameId = gameId;
   self.text = text;
-  self.answered = false;
 }
 
 function Picture (drawerId, gameId, image) {
@@ -67,6 +66,15 @@ function Picture (drawerId, gameId, image) {
   self.drawerId = drawerId;
   self.gameId = gameId;
   self.image = image;
+}
+
+function Answer (answererId, drawerId, gameId, text, correct) {
+  var self = this;
+  self.answererId = answererId;
+  self.drawerId = drawerId;
+  self.gameId = gameId;
+  self.text = text;
+  self.correct = correct;
 }
 
 function ProblemSet (name) {
@@ -91,6 +99,7 @@ var Games = new Meteor.Collection("games");
 var Players = new Meteor.Collection("players");
 var Subjects = new Meteor.Collection("subjects");
 var Pictures = new Meteor.Collection("pictures");
+var Answers = new Meteor.Collection("answers");
 var ProblemSets = new Meteor.Collection("problemSets");
 if (Meteor.isServer) {
   var Problems = new Meteor.Collection("problems");
@@ -131,6 +140,9 @@ if (Meteor.isServer) {
     Meteor.publish("pictures", function (gameId) {
       return Pictures.find({gameId: gameId});
     });
+    Meteor.publish("answers", function (gameId) {
+      return Answers.find({gameId: gameId});
+    });
     Meteor.publish("problemSets", function () {
       return ProblemSets.find({});
     });
@@ -142,6 +154,7 @@ if (Meteor.isServer) {
     Players.remove({});
     Subjects.remove({});
     Pictures.remove({});
+    Answers.remove({});
     Messages.remove({});
   });
 }

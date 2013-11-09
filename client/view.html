@@ -157,11 +157,8 @@
   <div>
     <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
   </div>
-  {{# if revealed }}
-    <div style="color:red">
-      {{> subject drawerId }}
-    </div>
-  {{ else }}
+  
+  {{# unless answered }}
     {{# if mine }}
       {{> subject drawerId }}
     {{ else }}
@@ -170,7 +167,11 @@
         <button>Guess!</button>
       </div>
     {{/ if }}
-  {{/ if }}
+  {{/ unless }}
+  
+  {{# each answers }}
+    {{> answer }}
+  {{/ each }}
 </template>
 
 <template name="players">
@@ -181,6 +182,12 @@
     {{# each players }}
       {{> player }}
     {{/ each }}
+  </div>
+</template>
+
+<template name="answer">
+  <div style="color: {{# if correct }} red {{ else }} black {{/ if }}">
+    {{ answerer }} : {{ text }}
   </div>
 </template>
 
