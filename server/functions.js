@@ -21,12 +21,10 @@ function beginNewRound (game) {
     Meteor.call("requestSubject", player._id, game._id);
     presentPlayerIds.push(player._id);
   });
-  Subjects.remove(
-    {$and: [
-      {gameId: game._id},
-      {drawerId: {$not: {$in: presentPlayerIds}}}
-    ]}
-  );
+  Subjects.remove({
+    gameId: game._id,
+    drawerId: {$not: {$in: presentPlayerIds}}
+  });
   Pictures.remove({gameId: game._id});
   Answers.remove({gameId: game._id});
 }
