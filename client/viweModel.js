@@ -175,18 +175,20 @@ Template.answer.events({
   "click button, keydown input": function (event, template) {
     if (event.type === "click" || (event.type === "keydown" && String.fromCharCode( event.which ) === "\r")) {
       var textbox = template.find("#answerInput");
-      Meteor.call("guess", Session.get("playerId"), this.drawerId, game()._id, textbox.value, function (error, correct) {
-        if (error) {
-          console.log(error);
-        } else {
-          if (correct) {
-            $.ionSound.play("Correct");
+      if (textbox.value) {
+        Meteor.call("guess", Session.get("playerId"), this.drawerId, game()._id, textbox.value, function (error, correct) {
+          if (error) {
+            console.log(error);
           } else {
-            $.ionSound.play("Wrong");
+            if (correct) {
+              $.ionSound.play("Correct");
+            } else {
+              $.ionSound.play("Wrong");
+            }
           }
-        }
-      });
-      textbox.value = "";
+        });
+        textbox.value = "";
+      }
       textbox.focus();
     }
   }
