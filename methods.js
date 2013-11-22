@@ -30,14 +30,13 @@ Meteor.methods({
   joinGame: function (userId, gameId) {
     if (Meteor.isServer) {
       var playerId;
-      if (Players.find({userId: userId}).count() == 0) {
+      if (Players.find({userId: userId, gameId: gameId}).count() == 0) {
         playerId = Players.insert(new Player(userId, gameId));
         var game = Games.findOne(gameId);
         if (arePhasesEqual(game.phase, game.phaseSet.drawingPhase)) {
           requestSubject(playerId, gameId);
         }
       } else {
-        Players.update({userId: userId}, {$set: {gameId: gameId}});
         playerId = Players.findOne({userId: userId})._id;
       }
       return playerId;
