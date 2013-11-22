@@ -8,38 +8,20 @@ function progress () {
       if (arePhasesEqual(originalPhase, game.phaseSet.answerPhase)) {
         beginNewRound(game);
       } else if (arePhasesEqual(originalPhase, game.phaseSet.guessingPhase)) {
-        revealAnswers(game);
+        Answers.update({gameId: game._id}, {$set: {isRevealed: true}}, {multi: true});
       }
     }
   });
 }
 
 function beginNewRound (game) {
+  Answers.remove({gameId: game._id});
+  Pictures.remove({gameId: game._id});
+  Guesses.remove({gameId: game._id});
+
   var players = Players.find({gameId: game._id});
-  var presentPlayerIds = new Array();
   players.forEach(function (player) {
     Meteor.call("requestSubject", player._id, game._id);
-    presentPlayerIds.push(player._id);
-  });
-  Subjects.remove({
-    gameId: game._id,
-    drawerId: {$not: {$in: presentPlayerIds}}
-  });
-  Pictures.remove({gameId: game._id});
-  Answers.remove({gameId: game._id});
-}
-
-function revealAnswers(game) {
-  var correctAnswers = Answers.find({gameId: game._id, correct: true});
-  var correctlyAnsweredSubjectIds = correctAnswers.map(function () {
-    return this.subjectId;
-  });
-  var notCorrectlyAnsweredSubjects = Subjects.find({
-    gameId: game._id,
-    _id: {$not: {$in: correctlyAnsweredSubjectIds}}
-  });
-  notCorrectlyAnsweredSubjects.forEach(function (subject) {
-    Answers.insert(new Answer(undefined, subject.drawerId, game._id, subject.text, true));
   });
 }
 

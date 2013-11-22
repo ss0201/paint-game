@@ -1,14 +1,13 @@
 Meteor.methods({
-  answer: function (answererId, drawerId, text) {
+  guess: function (guesserId, drawerId, gameId, text) {
     if (Meteor.isServer) {
-      var subject = Subjects.findOne({drawerId: drawerId});
-      var answerer = Players.findOne(answererId);
-      var drawer = Players.findOne(drawerId);
-      var answer = new Answer(answerer._id, drawer._id, subject.gameId, text, subject.text == text);
-      Answers.insert(answer);
-      if (answer.correct) {
-        Players.update(answerer._id, {$set: {score: answerer.score + 1}});
-        Players.update(drawer._id, {$set: {score: drawer.score + 1}});
+      var answer = Answers.findOne({drawerId: drawerId});
+      var guess = new Guess(guesserId, drawerId, gameId, text, answer.text == text);
+      Guesses.insert(guess);
+      if (guess.isCorrect) {
+        Players.update(guesserId, {$inc: {score: 1}});
+        Players.update(drawerId, {$inc: {score: 1}});
+        Answers.update(answer._id, {$set: {isRevealed: true}});
         return true;
       } else {
         return false;
@@ -19,11 +18,7 @@ Meteor.methods({
   requestSubject: function (drawerId, gameId) {
     if (Meteor.isServer) {
       var problem = getRandomProblem(gameId);
-      if (Subjects.find({drawerId: drawerId}).count() == 0) {
-        Subjects.insert(new Subject(drawerId, gameId, problem.text));
-      } else {
-        Subjects.update({drawerId: drawerId}, {$set: {text: problem.text}});
-      }
+      Answers.insert(new Answer(drawerId, gameId, problem.text));
     }
   },
   
@@ -49,7 +44,7 @@ Meteor.methods({
         Players.update({userId: userId}, {$set: {gameId: gameId}});
         playerId = Players.findOne({userId: userId})._id;
       }
-      return playerId
+      return playerId;
     }
   },
   

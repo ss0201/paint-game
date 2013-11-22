@@ -59,11 +59,12 @@ function Player (userId, gameId) {
   self.score = 0;
 }
 
-function Subject (drawerId, gameId, text) {
+function Answer (drawerId, gameId, text) {
   var self = this;
   self.drawerId = drawerId;
   self.gameId = gameId;
   self.text = text;
+  self.isRevealed = false;
 }
 
 function Picture (drawerId, gameId, image) {
@@ -73,13 +74,13 @@ function Picture (drawerId, gameId, image) {
   self.image = image;
 }
 
-function Answer (answererId, drawerId, gameId, text, correct) {
+function Guess (guesserId, drawerId, gameId, text, isCorrect) {
   var self = this;
-  self.answererId = answererId;
+  self.guesserId = guesserId;
   self.drawerId = drawerId;
   self.gameId = gameId;
   self.text = text;
-  self.correct = correct;
+  self.isCorrect = isCorrect;
 }
 
 function ProblemSet (name) {
@@ -102,9 +103,9 @@ function Message (speakerId, gameId, text) {
 
 var Games = new Meteor.Collection("games");
 var Players = new Meteor.Collection("players");
-var Subjects = new Meteor.Collection("subjects");
-var Pictures = new Meteor.Collection("pictures");
 var Answers = new Meteor.Collection("answers");
+var Pictures = new Meteor.Collection("pictures");
+var Guesses = new Meteor.Collection("guesses");
 var ProblemSets = new Meteor.Collection("problemSets");
 if (Meteor.isServer) {
   var Problems = new Meteor.Collection("problems");
@@ -131,22 +132,19 @@ if (Meteor.isServer) {
     Meteor.publish("players", function (gameId) {
       return Players.find({gameId: gameId});
     });
-    Meteor.publish("subjects", function (gameId, playerId) {
-      return Subjects.find(
-        {$and: [
-          {gameId: gameId},
-          {$or: [
-            {drawerId: playerId},
-            {answered: true}
-          ]}
+    Meteor.publish("answers", function (playerId) {
+      return Answers.find(
+        {$or: [
+          {drawerId: playerId},
+          {isRevealed: true}
         ]}
       );
     });
     Meteor.publish("pictures", function (gameId) {
       return Pictures.find({gameId: gameId});
     });
-    Meteor.publish("answers", function (gameId) {
-      return Answers.find({gameId: gameId});
+    Meteor.publish("guesses", function (gameId) {
+      return Guesses.find({gameId: gameId});
     });
     Meteor.publish("problemSets", function () {
       return ProblemSets.find({});
@@ -157,9 +155,9 @@ if (Meteor.isServer) {
 
     Games.remove({});
     Players.remove({});
-    Subjects.remove({});
-    Pictures.remove({});
     Answers.remove({});
+    Pictures.remove({});
+    Guesses.remove({});
     Messages.remove({});
   });
 }

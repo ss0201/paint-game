@@ -37,9 +37,9 @@ function onJoinedGame (playerId, gameId) {
     }
   });
   Meteor.subscribe("players", gameId);
-  Meteor.subscribe("subjects", gameId, playerId);
+  Meteor.subscribe("answers", playerId);
   Meteor.subscribe("pictures", gameId);
-  Meteor.subscribe("answers", gameId);
+  Meteor.subscribe("guesses", gameId);
   playSound();
 }
 

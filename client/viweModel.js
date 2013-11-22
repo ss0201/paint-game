@@ -71,6 +71,11 @@ function game () {
   return Games.findOne(Session.get("gameId"));
 }
 
+function isPhase (phase) {
+  var currentPhase = game() && game().phase;
+  return (currentPhase && arePhasesEqual(currentPhase, phase));
+}
+
 Template.gameStatus._name = function () {
   var name = game() && game().name;
   if (!name) {
@@ -105,15 +110,6 @@ Template.player.score = function () {
   return this.score + " point" + (this.score > 1 ? "s" : "");
 };
 
-Template.subject.text = function () {
-  var subject = Subjects.findOne({drawerId: this + ""});
-  var text = subject && subject.text;
-  if (!text) {
-    return "No Subject";
-  }
-  return text;
-};
-
 Template.drawing.rendered = function () {
   if (Template.drawing.show()) {
     $("#paint").show();
@@ -126,8 +122,8 @@ Template.drawing.show = function() {
   return game() && isPhase(game().phaseSet.drawingPhase);
 };
 
-Template.drawing.drawerData = function () {
-  return Session.get("playerId");
+Template.drawing.answer = function () {
+  return Answers.findOne({drawerId: Session.get("playerId")});
 };
 
 Template.paint.rendered = function () {
@@ -140,23 +136,6 @@ Template.paint.rendered = function () {
   });
 };
 
-Template.guessing.show = function() {
-  return game() && (isPhase(game().phaseSet.guessingPhase) || isPhase(game().phaseSet.answerPhase));
-};
-
-Template.guessing.pictures = function () {
-  return Pictures.find({});
-};
-
-function isPhase (phase) {
-  var currentPhase = game() && game().phase;
-  return (currentPhase && arePhasesEqual(currentPhase, phase));
-}
-
-Template.picture.drawer = function () {
-  return Players.findOne(this.drawerId);
-};
-
 function getImageInPaintArea () {
   return $("#paint").wPaint("image");
 }
@@ -165,21 +144,38 @@ function clearPaintArea () {
   $('#paint').wPaint('clear');
 }
 
-Template.picture.answered = function () {
-  return Answers.find({drawerId: this.drawerId, correct: true}).count() > 0;
+Template.guessing.show = function() {
+  return game() && (isPhase(game().phaseSet.guessingPhase) || isPhase(game().phaseSet.answerPhase));
 };
 
-Template.picture.mine = function () {
-  return (this.drawerId == Session.get("playerId"));
+Template.guessing.players = function () {
+  return Players.find({});
 };
 
-Template.picture.preserve(["#answerInput"]);
+Template.subject.pictures = function () {
+  return Pictures.find({drawerId: this._id});
+};
 
-Template.picture.events({
+Template.subject.answer = function () {
+  var answer = Answers.findOne({drawerId: this._id});
+  return (answer ? answer : new Answer(this._id, game()._id, "???"));
+};
+
+Template.subject.guesses = function () {
+  return Guesses.find({drawerId: this._id}).fetch().reverse().slice(0, 5);
+};
+
+Template.answer.mine = function () {
+  return this && this.drawerId == Session.get("playerId");
+};
+
+Template.answer.preserve(["#answerInput"]);
+
+Template.answer.events({
   "click button, keydown input": function (event, template) {
     if (event.type === "click" || (event.type === "keydown" && String.fromCharCode( event.which ) === "\r")) {
       var textbox = template.find("#answerInput");
-      Meteor.call("answer", Session.get("playerId"), this.drawerId, textbox.value, function (error, correct) {
+      Meteor.call("guess", Session.get("playerId"), this.drawerId, game()._id, textbox.value, function (error, correct) {
         if (error) {
           console.log(error);
         } else {
@@ -196,21 +192,13 @@ Template.picture.events({
   }
 });
 
-Template.picture.answers = function () {
-  return Answers.find({gameId: game()._id, drawerId: this.drawerId}).fetch().reverse().slice(0, 5);
+Template.guess.guesser = function () {
+  var userId = Players.findOne(this.guesserId).userId;
+  return Meteor.users.findOne(userId).username;
 };
 
 Template.players.players = function () {
   return Players.find({});
-};
-
-Template.answer.answerer = function () {
-  var user = Players.findOne(this.answererId);
-  if (!user) {
-    return "Answer";
-  }
-  var userId = user.userId;
-  return Meteor.users.findOne(userId).username;
 };
 
 Template.chat.messages = function () {

@@ -120,7 +120,7 @@
       <div>
         You are drawing:
       </div>
-      {{> subject drawerData }}
+      {{> answer answer }}
     </div>
   {{/ if }}
 
@@ -136,42 +136,14 @@
 <template name="guessing">
   {{# if show }}
     <div class="block">
-      {{# each pictures }}
+      {{# each players }}
         <div style="float:left; margin:0px 10px">
-          {{> picture }}
+          {{> subject }}
         </div>
       {{/ each }}
       <div style="clear:both" />
     </div>
   {{/ if }}
-</template>
-
-<template name="subject">
-  <div>
-    {{ text }}
-  </div>
-</template>
-
-<template name="picture">
-  {{> player drawer }}
-  <div>
-    <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
-  </div>
-  
-  {{# unless answered }}
-    {{# if mine }}
-      {{> subject drawerId }}
-    {{ else }}
-      <div>
-        <input id="answerInput" type="text" />
-        <button>Guess!</button>
-      </div>
-    {{/ if }}
-  {{/ unless }}
-  
-  {{# each answers }}
-    {{> answer }}
-  {{/ each }}
 </template>
 
 <template name="players">
@@ -185,9 +157,46 @@
   </div>
 </template>
 
+<template name="subject">
+  {{> player }}
+  
+  {{# each pictures }}
+    {{> picture }}
+  {{/ each }}
+
+  {{> answer answer }}
+  
+  {{# each guesses }}
+    {{> guess }}
+  {{/ each }}
+</template>
+
+<template name="picture">
+  <div>
+    <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
+  </div>
+</template>
+
 <template name="answer">
-  <div style="color: {{# if correct }} red {{ else }} black {{/ if }}">
-    {{ answerer }} : {{ text }}
+  <div>
+    {{# if mine }}
+      {{ text }}
+    {{ else }}
+      {{# if isRevealed }}
+        Answer : {{ text }}
+      {{ else }}
+        <div>
+          <input id="answerInput" type="text" />
+          <button>Guess!</button>
+        </div>
+      {{/ if }}
+    {{/ if }}
+  </div>
+</template>
+
+<template name="guess">
+  <div style="color: {{# if isCorrect }} red {{ else }} black {{/ if }}">
+    {{ guesser }} : {{ text }}
   </div>
 </template>
 
