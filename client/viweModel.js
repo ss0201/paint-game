@@ -25,6 +25,10 @@ function playSound (phase) {
   }
 }
 
+function openGoogleImageSearch (answer) {
+  window.open("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(answer.text), "search", "menubar=yes, scrollbars=yes, status=yes, toolbar=yes, location=yes, resizable=yes");
+}
+
 Template.page.notInGame = function () {
   return (!Session.get("gameId"));
 };

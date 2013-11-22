@@ -28,18 +28,24 @@ function joinGame (gameId) {
 function onJoinedGame (playerId, gameId) {
   Session.set("gameId", gameId);
   Session.set("playerId", playerId);
-  var game = Games.find(gameId);
-  game.observeChanges({
+  Meteor.subscribe("players", gameId);
+  Meteor.subscribe("answers", playerId);
+  Meteor.subscribe("pictures", gameId);
+  Meteor.subscribe("guesses", gameId);
+
+  Games.find(gameId).observeChanges({
     changed: function (id, fields) {
       if (fields.hasOwnProperty("phase")) {
         onPhaseChanged(fields.phase);
       }
     }
   });
-  Meteor.subscribe("players", gameId);
-  Meteor.subscribe("answers", playerId);
-  Meteor.subscribe("pictures", gameId);
-  Meteor.subscribe("guesses", gameId);
+  Answers.find({drawerId: playerId, gameId: gameId}).observe({
+    added: function (answer) {
+      openGoogleImageSearch(answer);
+    }
+  });
+
   playSound();
 }
 
