@@ -149,7 +149,10 @@ Template.guessing.show = function() {
 };
 
 Template.guessing.players = function () {
-  return Players.find({});
+  var presentPlayerIds = Pictures.find({}).map(function (picture) {
+    return picture.drawerId;
+  });
+  return Players.find({_id: {$in: presentPlayerIds}});
 };
 
 Template.subject.pictures = function () {
