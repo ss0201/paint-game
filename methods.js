@@ -15,13 +15,6 @@ Meteor.methods({
     }
   },
   
-  requestSubject: function (drawerId, gameId) {
-    if (Meteor.isServer) {
-      var problem = getRandomProblem(gameId);
-      Answers.insert(new Answer(drawerId, gameId, problem.text));
-    }
-  },
-  
   sendPicture: function (drawerId, gameId, image) {
     if (Meteor.isServer) {
       Pictures.insert(new Picture(drawerId, gameId, image));
@@ -39,7 +32,7 @@ Meteor.methods({
       var playerId;
       if (Players.find({userId: userId}).count() == 0) {
         playerId = Players.insert(new Player(userId, gameId));
-        Meteor.call("requestSubject", playerId, gameId);
+        requestSubject(playerId, gameId);
       } else {
         Players.update({userId: userId}, {$set: {gameId: gameId}});
         playerId = Players.findOne({userId: userId})._id;

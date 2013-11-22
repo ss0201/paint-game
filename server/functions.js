@@ -1,3 +1,7 @@
+Meteor.startup(function () {
+  Meteor.setInterval(progress, 1*1000);
+});
+
 function progress () {
   var games = Games.find({});
   games.forEach(function (game) {
@@ -21,13 +25,16 @@ function beginNewRound (game) {
 
   var players = Players.find({gameId: game._id});
   players.forEach(function (player) {
-    Meteor.call("requestSubject", player._id, game._id);
+    requestSubject(player._id, game._id);
   });
 }
 
-Meteor.startup(function () {
-  Meteor.setInterval(progress, 1*1000);
-});
+function requestSubject (drawerId, gameId) {
+  if (Meteor.isServer) {
+    var problem = getRandomProblem(gameId);
+    Answers.insert(new Answer(drawerId, gameId, problem.text));
+  }
+}
 
 function getRandomProblem (gameId) {
   var game = Games.findOne(gameId);
