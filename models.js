@@ -72,6 +72,7 @@ function Picture (drawerId, gameId, image) {
   self.drawerId = drawerId;
   self.gameId = gameId;
   self.image = image;
+  self.answer = "";
 }
 
 function Guess (guesserId, drawerId, gameId, text, isCorrect) {
@@ -107,6 +108,7 @@ var Answers = new Meteor.Collection("answers");
 var Pictures = new Meteor.Collection("pictures");
 var Guesses = new Meteor.Collection("guesses");
 var ProblemSets = new Meteor.Collection("problemSets");
+var FinishedPictures = new Meteor.Collection("finishedPictures");
 if (Meteor.isServer) {
   var Problems = new Meteor.Collection("problems");
 }
@@ -152,6 +154,9 @@ if (Meteor.isServer) {
     Meteor.publish("messages", function () {
       return Messages.find({});
     });
+    Meteor.publish("finishedPictures", function (gameId) {
+      return FinishedPictures.find({gameId: gameId});
+    });
 
     Games.remove({});
     Players.remove({});
@@ -159,5 +164,6 @@ if (Meteor.isServer) {
     Pictures.remove({});
     Guesses.remove({});
     Messages.remove({});
+    FinishedPictures.remove({});
   });
 }

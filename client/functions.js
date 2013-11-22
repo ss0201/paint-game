@@ -32,6 +32,7 @@ function onJoinedGame (playerId, gameId) {
   Meteor.subscribe("answers", playerId);
   Meteor.subscribe("pictures", gameId);
   Meteor.subscribe("guesses", gameId);
+  Meteor.subscribe("finishedPictures", gameId);
 
   Games.find(gameId).observeChanges({
     changed: function (id, fields) {

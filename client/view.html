@@ -7,14 +7,24 @@
 </body>
 
 <template name="page">
-  <h1>Paint Game!</h1>
-  {{# if notInGame }}
-    {{> lobby }}
-  {{ else }}
-    {{> game }}
-  {{/ if }}
+  <div class="ui-layout-center">
+    <div>
+      <h1>Paint Game!</h1>
+      {{# unless inGame }}
+        {{> lobby }}
+      {{ else }}
+        {{> game }}
+      {{/ unless }}
+      
+      {{> chat }}
+    </div>
+  </div>
   
-  {{> chat }}
+  <div class="ui-layout-east">
+    {{# if inGame }}
+      {{> gallery }}
+    {{/ if }}
+  </div>
 </template>
 
 <template name="lobby">
@@ -93,10 +103,10 @@
 </template>
 
 <template name="game">
-  {{> gameStatus }}
-  {{> drawing }}
-  {{> guessing }}
-  {{> players }}
+    {{> gameStatus }}
+    {{> drawing }}
+    {{> guessing }}
+    {{> players }}
 </template>
 
 <template name="gameStatus">
@@ -173,7 +183,7 @@
 
 <template name="picture">
   <div>
-    <img src="{{ image }}" style="width:400px; height:300px; border:solid black 1px;" />
+    <img src="{{ image }}" class="border" style="width:400px; height:300px;" />
   </div>
 </template>
 
@@ -218,5 +228,22 @@
 <template name="message">
   <div>
     {{ speaker }} : {{ text }}
+  </div>
+</template>
+
+<template name="gallery">
+  <div class="block center" style="width:200px;">
+    {{# each finishedPictures }}
+      {{> galleryItem }}
+    {{/ each }}
+  </div>
+</template>
+
+<template name="galleryItem">
+  <div class="block">
+    <img src="{{ image }}" class="border" style="width:200px; height:150px;">
+    <div>
+      {{ drawer }} : {{ answer }}
+    </div>
   </div>
 </template>

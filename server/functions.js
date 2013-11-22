@@ -19,6 +19,12 @@ function progress () {
 }
 
 function beginNewRound (game) {
+  Pictures.find({gameId: game._id}).forEach(function (picture) {
+    var answer = Answers.findOne({drawerId: picture.drawerId, gameId: game._id});
+    picture.answer = answer.text;
+    FinishedPictures.insert(picture);
+  });
+
   Answers.remove({gameId: game._id});
   Pictures.remove({gameId: game._id});
   Guesses.remove({gameId: game._id});

@@ -1,3 +1,12 @@
 div.block {
   margin: 10px 0px;
 }
+
+div.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+img.border {
+  border: solid black 1px;
+}

@@ -29,8 +29,8 @@ function openGoogleImageSearch (answer) {
   window.open("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(answer.text), "search", "menubar=yes, scrollbars=yes, status=yes, toolbar=yes, location=yes, resizable=yes");
 }
 
-Template.page.notInGame = function () {
-  return (!Session.get("gameId"));
+Template.page.inGame = function () {
+  return (Session.get("gameId") != undefined);
 };
 
 Template.lobby.games = function () {
@@ -79,6 +79,13 @@ function isPhase (phase) {
   var currentPhase = game() && game().phase;
   return (currentPhase && arePhasesEqual(currentPhase, phase));
 }
+
+Template.game.rendered = function () {
+  $("body").layout({
+    applyDefaultStyles: true,
+    east__size: "250"
+  });
+};
 
 Template.gameStatus._name = function () {
   var name = game() && game().name;
@@ -198,8 +205,8 @@ Template.answer.events({
 });
 
 Template.guess.guesser = function () {
-  var userId = Players.findOne(this.guesserId).userId;
-  return Meteor.users.findOne(userId).username;
+  var guesser = Players.findOne(this.guesserId);
+  return guesser && Meteor.users.findOne(guesser.userId).username;
 };
 
 Template.players.players = function () {
@@ -227,3 +234,12 @@ Template.chat.events({
     }
   }
 });
+
+Template.gallery.finishedPictures = function () {
+  return FinishedPictures.find({}).fetch().reverse();
+};
+
+Template.galleryItem.drawer = function () {
+  var drawer = Players.findOne(this.drawerId);
+  return drawer && Meteor.users.findOne(drawer.userId).username;
+};
