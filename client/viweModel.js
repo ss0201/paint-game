@@ -180,11 +180,7 @@ Template.answer.events({
           if (error) {
             console.log(error);
           } else {
-            if (correct) {
-              $.ionSound.play("Correct");
-            } else {
-              $.ionSound.play("Wrong");
-            }
+            $.ionSound.play(correct ? "Correct" : "Wrong");
           }
         });
         textbox.value = "";
