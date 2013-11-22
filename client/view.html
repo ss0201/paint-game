@@ -241,7 +241,9 @@
 
 <template name="galleryItem">
   <div class="block">
-    <img src="{{ image }}" class="border" style="width:200px; height:150px;">
+    <a href="{{ image }}" target="_blank">
+      <img src="{{ image }}" class="border" style="width:200px; height:150px;">
+    </a>
     <div>
       {{ drawer }} : {{ answer }}
     </div>
