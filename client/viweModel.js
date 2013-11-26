@@ -13,6 +13,9 @@ Template.page.created = function () {
     ],
     path: "sounds/"
   });
+  
+  $.fn.wPaint.cursors.pencil = {path: 'images/wPaint/main/cursor-crosshair.png', left: 7, top: 7};
+  $.fn.wPaint.menus.main.items.lineWidth.range = [1, 5, 10, 25, 50, 99];
 }
 
 function playSound (phase) {
@@ -140,10 +143,8 @@ Template.drawing.answer = function () {
 Template.paint.rendered = function () {
   $("#paint").wPaint({
     strokeStyle: "#000000",
-    lineWidthMin: 1,
-    lineWidthMax: 20,
-    lineWidth: 1,
-    menu: ["pencil", "eraser", "strokeColor", "lineWidth", "undo", "redo", "clear"]
+    bg: "#FFFFFF",
+    lineWidth: 1
   });
 };
 
