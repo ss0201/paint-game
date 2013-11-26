@@ -36,6 +36,10 @@ Template.page.inGame = function () {
   return (Session.get("gameId") != undefined);
 };
 
+Template.lobby.rendered = function () {
+  $("body").layout().destroy();
+};
+
 Template.lobby.games = function () {
   return Games.find({});
 };
