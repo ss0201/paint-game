@@ -2,7 +2,7 @@ Meteor.methods({
   guess: function (guesserId, drawerId, gameId, text) {
     if (Meteor.isServer) {
       var answer = Answers.findOne({drawerId: drawerId});
-      var guess = new Guess(guesserId, drawerId, gameId, text, answer.text == text);
+      var guess = new Guess(guesserId, drawerId, gameId, text, answer.problem.problemData.text == text);
       Guesses.insert(guess);
       if (guess.isCorrect) {
         Players.update(guesserId, {$inc: {score: 1}});
@@ -54,13 +54,11 @@ Meteor.methods({
     }
   },
   
-  createProblemSet: function (name, problemTexts) {
+  createProblemSet: function (name, problemDataSet) {
     if (Meteor.isServer) {
       var problemSetId = ProblemSets.insert(new ProblemSet(name));
-      _.each(problemTexts, function (text) {
-        if (text) {
-          Problems.insert(new Problem(problemSetId, text));
-        }
+      _.each(problemDataSet, function (problemData) {
+        Problems.insert(new Problem(problemSetId, problemData));
       });
     }
   }

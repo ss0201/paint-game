@@ -21,7 +21,7 @@ function progress () {
 function beginNewRound (game) {
   Pictures.find({gameId: game._id}).forEach(function (picture) {
     var answer = Answers.findOne({drawerId: picture.drawerId, gameId: game._id});
-    picture.answer = answer.text;
+    picture.answer = answer.problem.problemData.text;
     FinishedPictures.insert(picture);
   });
 
@@ -38,7 +38,7 @@ function beginNewRound (game) {
 function requestSubject (drawerId, gameId) {
   if (Meteor.isServer) {
     var problem = getRandomProblem(gameId);
-    Answers.insert(new Answer(drawerId, gameId, problem.text));
+    Answers.insert(new Answer(drawerId, gameId, problem));
   }
 }
 

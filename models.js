@@ -59,11 +59,11 @@ function Player (userId, gameId) {
   self.score = 0;
 }
 
-function Answer (drawerId, gameId, text) {
+function Answer (drawerId, gameId, problem) {
   var self = this;
   self.drawerId = drawerId;
   self.gameId = gameId;
-  self.text = text;
+  self.problem = problem;
   self.isRevealed = false;
 }
 
@@ -89,10 +89,16 @@ function ProblemSet (name) {
   self.name = name;
 }
 
-function Problem (problemSetId, text) {
+function ProblemData (text, searchText) {
+  var self = this;
+  self.text = text;
+  self.searchText = searchText || text;
+}
+
+function Problem (problemSetId, problemData) {
   var self = this;
   self.problemSetId = problemSetId;
-  self.text = text;
+  self.problemData = problemData;
 }
 
 function Message (speakerId, gameId, text) {

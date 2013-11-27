@@ -29,7 +29,7 @@ function playSound (phase) {
 }
 
 function openGoogleImageSearch (answer) {
-  window.open("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(answer.text), "search", "menubar=yes, scrollbars=yes, status=yes, toolbar=yes, location=yes, resizable=yes");
+  window.open("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(answer.problem.problemData.searchText), "search", "menubar=yes, scrollbars=yes, status=yes, toolbar=yes, location=yes, resizable=yes");
 }
 
 Template.page.inGame = function () {
@@ -186,6 +186,10 @@ Template.subject.guesses = function () {
 
 Template.answer.mine = function () {
   return this && this.drawerId == Session.get("playerId");
+};
+
+Template.answer.text = function () {
+  return this && this.problem.problemData.text;
 };
 
 Template.answer.preserve(["#answerInput"]);

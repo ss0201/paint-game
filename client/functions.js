@@ -71,8 +71,15 @@ function uploadProblems (files) {
     reader.onload = function (e) {
       var problemSetName = file.name.substr(0, file.name.lastIndexOf('.')) || file.name;
       if (ProblemSets.find({name: problemSetName}).count() == 0) {
-        var problems = e.target.result.split(/\r?\n/);
-        Meteor.call("createProblemSet", problemSetName, problems);
+        var lines = e.target.result.split(/\r?\n/);
+        var problemDataSet = new Array();
+        _.each(lines, function (line) {
+          if (line) {
+            var texts = line.split(",");
+            problemDataSet.push(new ProblemData(texts[0], texts[1]));
+          }
+        });
+        Meteor.call("createProblemSet", problemSetName, problemDataSet);
       }
     };
     reader.readAsText(file);
