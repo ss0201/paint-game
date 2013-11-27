@@ -215,10 +215,14 @@
     <div>
       Chat:
     </div>
-    <div>
-      <input id="message" type="text" />
-      <button>Submit</button>
-    </div>
+    
+    {{# if currentUser }}
+      <div>
+        <input id="message" type="text" />
+        <button>Submit</button>
+      </div>
+    {{/ if }}
+    
     {{# each messages }}
       {{> message }}
     {{/ each }}
