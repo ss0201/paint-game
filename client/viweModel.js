@@ -37,10 +37,12 @@ Template.page.inGame = function () {
 };
 
 Template.lobby.rendered = function () {
-  $("body").layout().destroy();
+  if ($("body").hasClass("ui-layout-container")) {
+    $("body").layout().destroy();
+  }
 };
 
-Template.lobby.games = function () {
+Template.gameList.games = function () {
   return Games.find({});
 };
 

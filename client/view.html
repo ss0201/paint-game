@@ -34,15 +34,21 @@
   {{# unless currentUser }}
     Please Sign in. (See top right corner.)
   {{/ unless }}
+  
+  {{> gameList }}
+  
+  {{# if currentUser }}
+    {{> newGame }}
+    {{> problemUploader }}
+  {{/ if }}
+</template>
+
+<template name="gameList">
   <div class="block">
     {{# each games }}
       {{> gameInfo }}
     {{/ each }}
   </div>
-  {{# if currentUser }}
-    {{> newGame }}
-    {{> problemUploader }}
-  {{/ if }}
 </template>
 
 <template name="gameInfo">
