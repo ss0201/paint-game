@@ -6,7 +6,7 @@ function progress () {
   var games = Games.find({});
   games.forEach(function (game) {
     tickClock(game);
-    if (isTimeOver(game)) {
+    if (isReadyForNextPhase(game)) {
       var originalPhase = game.phase;
       changePhase(game);
       if (arePhasesEqual(originalPhase, game.phaseSet.answerPhase)) {

@@ -17,6 +17,14 @@ if (Meteor.isServer) {
   function isTimeOver (game) {
     return (game.clock == 0);
   }
+  
+  function isReadyForNextPhase (game) {
+    if (isTimeOver(game)) {
+      return true;
+    } else if (arePhasesEqual(game.phase, game.phaseSet.guessingPhase)) {
+      return Answers.find({gameId: game._id, isRevealed: false}).count() == 0;
+    }
+  }
 }
 
 function Phase (name, duration) {
