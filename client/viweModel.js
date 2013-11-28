@@ -18,7 +18,7 @@ Template.page.created = function () {
   $.fn.wPaint.menus.main.items.lineWidth.range = [1, 5, 10, 25, 50, 99];
 }
 
-function playSound (phase) {
+playSound = function (phase) {
   if (isPhase(game().phaseSet.drawingPhase)) {
     $.ionSound.play("NewRound");
   } else if (isPhase(game().phaseSet.guessingPhase)) {
@@ -28,7 +28,7 @@ function playSound (phase) {
   }
 }
 
-function openGoogleImageSearch (answer) {
+openGoogleImageSearch = function (answer) {
   window.open("https://www.google.com/search?tbm=isch&q=" + encodeURIComponent(answer.problem.problemData.searchText), "search", "menubar=yes, scrollbars=yes, status=yes, toolbar=yes, location=yes, resizable=yes");
 }
 
@@ -80,11 +80,11 @@ Template.problemUploader.events({
   }
 });
 
-function game () {
+var game = function () {
   return Games.findOne(Session.get("gameId"));
 }
 
-function isPhase (phase) {
+var isPhase = function (phase) {
   var currentPhase = game() && game().phase;
   return (currentPhase && arePhasesEqual(currentPhase, phase));
 }
@@ -154,11 +154,11 @@ Template.paint.rendered = function () {
   });
 };
 
-function getImageInPaintArea () {
+getImageInPaintArea = function () {
   return $("#paint").wPaint("image");
 }
 
-function clearPaintArea () {
+clearPaintArea = function () {
   $('#paint').wPaint('clear');
 }
 

@@ -1,4 +1,4 @@
-function Game (name, problemSetId, phaseSet) {
+Game = function (name, problemSetId, phaseSet) {
   var self = this;
   self.name = name;
   self.phaseSet = phaseSet;
@@ -8,17 +8,17 @@ function Game (name, problemSetId, phaseSet) {
 }
 
 if (Meteor.isServer) {
-  function tickClock (game) {
+  tickClock = function (game) {
     if (game.clock > 0) {
       Games.update(game._id, {$set: {clock: game.clock - 1}});
     }
   }
   
-  function isTimeOver (game) {
+  isTimeOver = function (game) {
     return (game.clock == 0);
   }
   
-  function isReadyForNextPhase (game) {
+  isReadyForNextPhase = function (game) {
     if (isTimeOver(game)) {
       return true;
     } else if (arePhasesEqual(game.phase, game.phaseSet.guessingPhase)) {
@@ -27,25 +27,25 @@ if (Meteor.isServer) {
   }
 }
 
-function Phase (name, duration) {
+Phase = function (name, duration) {
   var self = this;
   self.name = name;
   self.duration = duration;
 }
 
-function PhaseSet (drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration) {
+PhaseSet = function (drawingPhaseDuration, guessingPhaseDuration, answerPhaseDuration) {
   var self = this;
   self.drawingPhase = new Phase("Drawing", drawingPhaseDuration);
   self.guessingPhase = new Phase("Guessing", guessingPhaseDuration);
   self.answerPhase = new Phase("Answer", answerPhaseDuration);
 }
 
-function arePhasesEqual (left, right) {
+arePhasesEqual = function (left, right) {
   return left.name == right.name;
 }
 
 if (Meteor.isServer) {
-  function changePhase (game) {
+  changePhase = function (game) {
     var nextPhase = null;
     if (arePhasesEqual(game.phase, game.phaseSet.drawingPhase)) {
       nextPhase = game.phaseSet.guessingPhase;
@@ -60,14 +60,14 @@ if (Meteor.isServer) {
   }
 }
 
-function Player (userId, gameId) {
+Player = function (userId, gameId) {
   var self = this;
   self.userId = userId;
   self.gameId = gameId;
   self.score = 0;
 }
 
-function Answer (drawerId, gameId, problem) {
+Answer = function (drawerId, gameId, problem) {
   var self = this;
   self.drawerId = drawerId;
   self.gameId = gameId;
@@ -75,7 +75,7 @@ function Answer (drawerId, gameId, problem) {
   self.isRevealed = false;
 }
 
-function Picture (drawerId, gameId, image) {
+Picture = function (drawerId, gameId, image) {
   var self = this;
   self.drawerId = drawerId;
   self.gameId = gameId;
@@ -83,7 +83,7 @@ function Picture (drawerId, gameId, image) {
   self.answer = "";
 }
 
-function Guess (guesserId, drawerId, gameId, text, isCorrect) {
+Guess = function (guesserId, drawerId, gameId, text, isCorrect) {
   var self = this;
   self.guesserId = guesserId;
   self.drawerId = drawerId;
@@ -92,41 +92,41 @@ function Guess (guesserId, drawerId, gameId, text, isCorrect) {
   self.isCorrect = isCorrect;
 }
 
-function ProblemSet (name) {
+ProblemSet = function (name) {
   var self = this;
   self.name = name;
 }
 
-function ProblemData (text, searchText) {
+ProblemData = function (text, searchText) {
   var self = this;
   self.text = text;
   self.searchText = searchText || text;
 }
 
-function Problem (problemSetId, problemData) {
+Problem = function (problemSetId, problemData) {
   var self = this;
   self.problemSetId = problemSetId;
   self.problemData = problemData;
 }
 
-function Message (speakerId, gameId, text) {
+Message = function (speakerId, gameId, text) {
   var self = this;
   self.speakerId = speakerId;
   self.gameId = gameId;
   self.text = text;
 }
 
-var Games = new Meteor.Collection("games");
-var Players = new Meteor.Collection("players");
-var Answers = new Meteor.Collection("answers");
-var Pictures = new Meteor.Collection("pictures");
-var Guesses = new Meteor.Collection("guesses");
-var ProblemSets = new Meteor.Collection("problemSets");
-var FinishedPictures = new Meteor.Collection("finishedPictures");
+Games = new Meteor.Collection("games");
+Players = new Meteor.Collection("players");
+Answers = new Meteor.Collection("answers");
+Pictures = new Meteor.Collection("pictures");
+Guesses = new Meteor.Collection("guesses");
+ProblemSets = new Meteor.Collection("problemSets");
+FinishedPictures = new Meteor.Collection("finishedPictures");
 if (Meteor.isServer) {
-  var Problems = new Meteor.Collection("problems");
+  Problems = new Meteor.Collection("problems");
 }
-var Messages = new Meteor.Collection("messages");
+Messages = new Meteor.Collection("messages");
 
 if (Meteor.isClient) {
   Deps.autorun(function () {

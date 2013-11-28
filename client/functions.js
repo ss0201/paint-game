@@ -1,20 +1,4 @@
-function onPhaseChanged (phase) {
-  var gameId = Session.get("gameId");
-  var game = Games.findOne(gameId);
-  if (arePhasesEqual(phase, game.phaseSet.guessingPhase)) {
-    var image = getImageInPaintArea();
-    Meteor.call("sendPicture", Session.get("playerId"), gameId, image);
-    clearPaintArea();
-  }
-  playSound();
-}
-
-Meteor.startup(function () {
-  Session.set("gameId", undefined);
-  Session.set("playerId", undefined);
-});
-
-function joinGame (gameId) {
+joinGame = function (gameId) {
   Meteor.call("joinGame", Meteor.userId(), gameId, function (error, result) {
     if (error) {
       console.log(error);
@@ -23,34 +7,9 @@ function joinGame (gameId) {
       onJoinedGame(playerId, gameId);
     }
   });
-}
+};
 
-function onJoinedGame (playerId, gameId) {
-  Session.set("gameId", gameId);
-  Session.set("playerId", playerId);
-  Meteor.subscribe("players", gameId);
-  Meteor.subscribe("answers", playerId);
-  Meteor.subscribe("pictures", gameId);
-  Meteor.subscribe("guesses", gameId);
-  Meteor.subscribe("finishedPictures", gameId);
-
-  Games.find(gameId).observeChanges({
-    changed: function (id, fields) {
-      if (fields.hasOwnProperty("phase")) {
-        onPhaseChanged(fields.phase);
-      }
-    }
-  });
-  Answers.find({drawerId: playerId, gameId: gameId}).observe({
-    added: function (answer) {
-      openGoogleImageSearch(answer);
-    }
-  });
-
-  playSound();
-}
-
-function createGame (gameName, problemSetId, phaseSet) {
+createGame = function (gameName, problemSetId, phaseSet) {
   Meteor.call("createGame", gameName, problemSetId, phaseSet, function (error, result) {
     var gameId = result;
     if (error) {
@@ -59,9 +18,9 @@ function createGame (gameName, problemSetId, phaseSet) {
       joinGame(gameId);
     }
   });
-}
+};
 
-function uploadProblems (files) {
+uploadProblems = function (files) {
   _.each(files, function (file) {
     if (!file.type.match("text")) {
       return true;
@@ -84,4 +43,45 @@ function uploadProblems (files) {
     };
     reader.readAsText(file);
   });
-}
+};
+
+Meteor.startup(function () {
+  Session.set("gameId", undefined);
+  Session.set("playerId", undefined);
+});
+
+var onPhaseChanged = function (phase) {
+  var gameId = Session.get("gameId");
+  var game = Games.findOne(gameId);
+  if (arePhasesEqual(phase, game.phaseSet.guessingPhase)) {
+    var image = getImageInPaintArea();
+    Meteor.call("sendPicture", Session.get("playerId"), gameId, image);
+    clearPaintArea();
+  }
+  playSound();
+};
+
+var onJoinedGame = function (playerId, gameId) {
+  Session.set("gameId", gameId);
+  Session.set("playerId", playerId);
+  Meteor.subscribe("players", gameId);
+  Meteor.subscribe("answers", playerId);
+  Meteor.subscribe("pictures", gameId);
+  Meteor.subscribe("guesses", gameId);
+  Meteor.subscribe("finishedPictures", gameId);
+
+  Games.find(gameId).observeChanges({
+    changed: function (id, fields) {
+      if (fields.hasOwnProperty("phase")) {
+        onPhaseChanged(fields.phase);
+      }
+    }
+  });
+  Answers.find({drawerId: playerId, gameId: gameId}).observe({
+    added: function (answer) {
+      openGoogleImageSearch(answer);
+    }
+  });
+
+  playSound();
+};
