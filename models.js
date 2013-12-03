@@ -75,21 +75,23 @@ Answer = function (drawerId, gameId, problem) {
   self.isRevealed = false;
 }
 
-Picture = function (drawerId, gameId, image) {
+Picture = function (drawerId, gameId, image, time) {
   var self = this;
   self.drawerId = drawerId;
   self.gameId = gameId;
   self.image = image;
+  self.time = time;
   self.answer = "";
 }
 
-Guess = function (guesserId, drawerId, gameId, text, isCorrect) {
+Guess = function (guesserId, drawerId, gameId, text, isCorrect, time) {
   var self = this;
   self.guesserId = guesserId;
   self.drawerId = drawerId;
   self.gameId = gameId;
   self.text = text;
   self.isCorrect = isCorrect;
+  self.time = time;
 }
 
 ProblemSet = function (name) {
@@ -109,11 +111,12 @@ Problem = function (problemSetId, problemData) {
   self.problemData = problemData;
 }
 
-Message = function (speakerId, gameId, text) {
+Message = function (speakerId, gameId, text, time) {
   var self = this;
   self.speakerId = speakerId;
   self.gameId = gameId;
   self.text = text;
+  self.time = time;
 }
 
 Games = new Meteor.Collection("games");

@@ -183,7 +183,7 @@ Template.subject.answer = function () {
 };
 
 Template.subject.guesses = function () {
-  return Guesses.find({drawerId: this._id}).fetch().reverse().slice(0, 5);
+  return Guesses.find({drawerId: this._id}, {sort: [["time", "desc"], ["_id", "asc"]], limit: 5});
 };
 
 Template.answer.mine = function () {
@@ -225,7 +225,7 @@ Template.players.players = function () {
 };
 
 Template.chat.messages = function () {
-  return Messages.find({gameId: Session.get("gameId")}).fetch().reverse();
+  return Messages.find({gameId: Session.get("gameId")}, {sort: [["time", "desc"], ["_id", "asc"]]});
 };
 
 Template.message.speaker = function () {
@@ -247,7 +247,7 @@ Template.chat.events({
 });
 
 Template.gallery.finishedPictures = function () {
-  return FinishedPictures.find({}).fetch().reverse();
+  return FinishedPictures.find({}, {sort: [["time", "desc"], ["_id", "asc"]]});
 };
 
 Template.galleryItem.drawer = function () {

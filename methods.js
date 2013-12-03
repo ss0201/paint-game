@@ -2,7 +2,7 @@ Meteor.methods({
   guess: function (guesserId, drawerId, gameId, text) {
     if (Meteor.isServer) {
       var answer = Answers.findOne({drawerId: drawerId});
-      var guess = new Guess(guesserId, drawerId, gameId, text, answer.problem.problemData.text == text);
+      var guess = new Guess(guesserId, drawerId, gameId, text, answer.problem.problemData.text == text, Date.now());
       Guesses.insert(guess);
       if (guess.isCorrect) {
         Players.update(guesserId, {$inc: {score: 1}});
@@ -17,7 +17,7 @@ Meteor.methods({
   
   sendPicture: function (drawerId, gameId, image) {
     if (Meteor.isServer) {
-      Pictures.insert(new Picture(drawerId, gameId, image));
+      Pictures.insert(new Picture(drawerId, gameId, image, Date.now()));
     }
   },
   
@@ -45,7 +45,7 @@ Meteor.methods({
   
   speak: function (speakerId, gameId, message) {
     if (Meteor.isServer) {
-      Messages.insert(new Message(speakerId, gameId, message));
+      Messages.insert(new Message(speakerId, gameId, message, Date.now()));
       var messages = Messages.find({gameId: gameId});
       if (messages.count() > 10) {
         var oldest = _.first(messages.fetch());
