@@ -111,6 +111,22 @@ Problem = function (problemSetId, problemData) {
   self.problemData = problemData;
 }
 
+ProblemPool = function (gameId, problemSetId) {
+  var self = this;
+  self.gameId = gameId;
+  self.problemSetId = problemSetId;
+  populateProblemPool(self);
+}
+
+if (Meteor.isServer) {
+  populateProblemPool = function (problemPool) {
+    problemPool.availableProblems = new Array();
+    Problems.find({problemSetId: problemPool.problemSetId}).forEach(function (problem) {
+      problemPool.availableProblems.push(problem);
+    });
+  }
+}
+
 Message = function (speakerId, gameId, text, time) {
   var self = this;
   self.speakerId = speakerId;
@@ -128,6 +144,7 @@ ProblemSets = new Meteor.Collection("problemSets");
 FinishedPictures = new Meteor.Collection("finishedPictures");
 if (Meteor.isServer) {
   Problems = new Meteor.Collection("problems");
+  ProblemPools = new Meteor.Collection("problemPools");
 }
 Messages = new Meteor.Collection("messages");
 
@@ -182,5 +199,6 @@ if (Meteor.isServer) {
     Guesses.remove({});
     Messages.remove({});
     FinishedPictures.remove({});
+    ProblemPools.remove({});
   });
 }

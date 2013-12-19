@@ -44,6 +44,13 @@ requestSubject = function (drawerId, gameId) {
 
 var getRandomProblem = function (gameId) {
   var game = Games.findOne(gameId);
-  var problems = Problems.find({problemSetId: game.problemSetId});
-  return Random.choice(problems.fetch());
+  var problemPool = ProblemPools.findOne({gameId: game._id});
+  var problem = Random.choice(problemPool.availableProblems);
+  var index = problemPool.availableProblems.indexOf(problem);
+  problemPool.availableProblems.splice(index, 1);
+  if (problemPool.availableProblems.length == 0) {
+    populateProblemPool(problemPool);
+  }
+  ProblemPools.update(problemPool._id, {$set: {availableProblems: problemPool.availableProblems}});
+  return problem;
 }

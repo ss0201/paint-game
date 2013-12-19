@@ -23,7 +23,9 @@ Meteor.methods({
   
   createGame: function (name, problemSetId, phaseSet) {
     if (Meteor.isServer) {
-      return Games.insert(new Game(name, problemSetId, phaseSet));
+      var gameId = Games.insert(new Game(name, problemSetId, phaseSet));
+      ProblemPools.insert(new ProblemPool(gameId, problemSetId));
+      return gameId;
     }
   },
   
